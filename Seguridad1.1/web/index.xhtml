@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet library="css" name="main.css"/>
+        <h:outputStylesheet library="css" name="estilos.css"/>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true" sticky="true"  /> 
+            <p:layout fullPage="true">
+                <p:layoutUnit position="west" 
+                              size="200" 
+                              header="Left" 
+                              closable="true" 
+                              collapsible="true">
+                    <p:panelMenu style="width:200px">
+                        <p:submenu label="Mantenimiento de Módulos">
+                            <p:menuitem value="Nuevos Módulo"  
+                                        icon="ui-icon-document" 
+                                        oncomplete="finalizarModulo();"
+                                        onclick="PF('wiz').loadStep('tab0', false);"
+                                        actionListener="#{mbSeguridad.limpiarCamposModulo()}"
+                                        update=":form:form2:dlgModulos"
+                                        process="@this"
+                                        />
+                            <p:menuitem value="Agregar Acciones" 
+                                        oncomplete="PF('dlgAcciones').show()"
+                                        icon="ui-icon-document" />
+                        </p:submenu>
+                        <p:submenu label="Usuarios">
+                            <p:menuitem value="Nuevo Usuario" 
+                                        id="itemNvUsuario"
+                                        icon="ui-icon-document"
+                                        actionListener="#{mbSeguridad.mensajeAviso()}"
+                                        update=":form:form2:cmbCedis"
+                                        />
+                            <p:menuitem value="Asigancion de perfiles" 
+                                        icon="ui-icon-person"
+                                        actionListener="#{mbSeguridad.mensajeAvisoAcceso()}"
+                                       />
+                        </p:submenu>
+                        <p:submenu label="Configuracion">
+                            <p:menuitem value="Cuenta de Correo"
+                                        icon="ui-icon-mail-closed"
+                                        oncomplete="PF('dlgCorreo').show();"/>
+                        </p:submenu>
+                    </p:panelMenu>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <p:treeTable value="#{mbSeguridad.mbArbol.root1}"
+                                 var="document"
+                                 selectionMode="checkbox"
+                                 selection="#{mbSeguridad.mbArbol.selectedNodes2}"
+                                 id="treeT"
+                                 >
+                        <f:facet name="header">
+                            <p:selectOneMenu value="#{mbSeguridad.mbBasesDatos.cmbBase}">
+                                <f:selectItems value="#{mbSeguridad.mbBasesDatos.lst}"/>
+                                <f:converter converterId="CBasesDatos"/>
+                                <p:ajax event="change" 
+                                        update="cmbPerfil"/>
+                            </p:selectOneMenu>
+                            &nbsp;&nbsp;
+                            <p:selectOneMenu value="#{mbSeguridad.mbArbol.cmbPerfil}" 
+                                             id="cmbPerfil"
+                                             style="width: 300px"
+                                             filter="true"
+                                             disabled="#{mbSeguridad.mbBasesDatos.cmbBase.idBaseDatos==0}">
+                                <f:selectItems value="#{mbSeguridad.mbArbol.lstPerfiles}"/>
+                                <f:converter converterId="Cperfiles"/>
+                                <p:ajax event="change" 
+                                        listener="#{mbSeguridad.crearTreeTable()}"
+                                        process="@this treeT"
+                                        update=":form:treeT"/>
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <p:column>
+                            <h:outputText value="#{document}"/>
+                        </p:column>
+                    </p:treeTable>
+                    <p:commandButton value="Obtener informacion"
+                                     actionListener="#{mbSeguridad.mbArbol.dameInformacion()}"
+                                     process="@this treeT"/>
+                </p:layoutUnit>
+            </p:layout>
+            <ui:include src="dialogs.xhtml"/>
+        </h:form>
+    </h:body>
+    <script>
+
+
+
+                                            function finalizarModulo() {
+                                                PF('dlgModulos').show();
+                                            }
+    </script>
+</html>
+

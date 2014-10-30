@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="form2">
+            <p:dialog header="Asistente para la creacion de Módulos"
+                      widgetVar="dlgModulos"
+                      resizable="false"
+                      modal="true"
+                      width="400"
+                      id="dlgModulos"
+                      showEffect="fold"
+                      hideEffect="fold"
+                      >
+                <br></br>
+                <p:messages  id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                <p:wizard widgetVar="wiz" 
+                          flowListener="#{mbSeguridad.onFlowProcess}" 
+                          id="wizModulos"
+                          >
+                    <p:tab title="Módulo" id="tab0">
+                        <p:panel header="Datos del Módulo" id="panelModulo">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Módulo:"  style="color: black"/>
+                                <p:inputText value="#{mbSeguridad.mbModulos.modulo.modulo}"  
+                                             style="width: 250px" />
+                                <p:outputLabel value="Url:" style="color: black"/>
+                                <p:inputText value="#{mbSeguridad.mbModulos.modulo.url}"  style="width: 250px"/>
+                                <p:outputLabel value="Menu:" style="color: black"/> 
+                                <p:selectOneMenu style="width: 260px"
+                                                 id="cmbModulos"
+                                                 filter="true"
+                                                 value="#{mbSeguridad.mbMenus.cmbMenu}">
+                                    <f:selectItems value="#{mbSeguridad.mbMenus.lstMenu}"/>
+                                    <f:converter converterId="CMenus"/>
+                                    <p:ajax event="change" 
+                                            listener="#{mbSeguridad.dameSubMenus()}" 
+                                            update="cmbSubMenu"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Sub Menu:" style="color: black"/>
+                                <p:selectOneMenu style="width: 260px"
+                                                 id="cmbSubMenu"
+                                                 value="#{mbSeguridad.mbMenus.mbSubMenu.cmbSubMenu}">
+                                    <f:selectItems value="#{mbSeguridad.mbMenus.mbSubMenu.lstSubmenus}"/>
+                                    <f:converter converterId="CSubModulo"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab title="Acciones" id="tab1">
+                        <p:panel header="Acciones del Módulo">
+                            <p:toolbar style="width: 100%">
+                                <f:facet name="left">
+                                    <p:commandButton icon="ui-icon-disk"
+                                                     id="btnGuardarAccion"
+                                                     disabled="#{mbSeguridad.mbAccion.listaAcciones.size() == 0}"
+                                                     actionListener="#{mbSeguridad.guardar}"
+                                                     immediate="true"
+                                                     update=":form:growl"
+                                                     oncomplete="finalizar();"
+                                                     onclick="PF('wiz').loadStep('tab0', false);"
+                                                     />
+                                </f:facet>
+                                <f:facet name="right">
+                                    <p:commandButton icon="ui-icon-cart" 
+                                                     update="tablaAccion txtAccion txtIdAccion btnGuardarAccion"
+                                                     actionListener="#{mbSeguridad.agregarAcciones()}"
+                                                     process="@this txtAccion txtIdAccion"
+                                                     />
+                                    <p:commandButton id="btnEliminarAc"
+                                                     icon="ui-icon-trash" 
+                                                     disabled="#{mbSeguridad.mbAccion.selecctionAccion == null}"
+                                                     actionListener="#{mbSeguridad.eliminarAccion()}"
+                                                     update="btnEliminarAc tablaAccion btnGuardarAccion"/>
+                                </f:facet>
+                            </p:toolbar>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Acciones:" style="color: black"/>
+                                <p:inputText id="txtAccion" 
+                                             value="#{mbSeguridad.mbAccion.acciones.accion}"
+                                             style="width: 250px"
+                                             />
+                                <p:outputLabel value="Id:" style="color: black"/>
+                                <p:inputText id="txtIdAccion" value="#{mbSeguridad.mbAccion.acciones.id}"
+                                             style="width: 250px"
+                                             />
+                            </h:panelGrid>
+                            <p:dataTable style="width: 100%"
+                                         emptyMessage="NO HAY ACCIONES"
+                                         value="#{mbSeguridad.mbAccion.listaAcciones}"
+                                         var="accion"
+                                         id="tablaAccion"
+                                         rowKey="#{accion}"
+                                         selection="#{mbSeguridad.mbAccion.selecctionAccion}"
+                                         selectionMode="single"
+                                         scrollable="true"
+                                         scrollHeight="150"
+                                         >
+                                <p:ajax  event="rowSelect"
+                                         update=":form:form2:btnEliminarAc"
+                                         />
+                                <p:column headerText="Acción">
+                                    #{accion.accion}
+                                </p:column>
+                                <p:column headerText="Id">
+                                    #{accion.id}
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </p:dialog>
+
+            <p:dialog widgetVar="dlgAcciones" 
+                      resizable="false"
+                      header="Módulo de altas de Acciones"
+                      width="500"
+                      modal="true"
+                      showEffect="fold"
+                      hideEffect="fold">
+
+                <p:messages  id="msgModulo" showDetail="true" autoUpdate="true" closable="true" />
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Módulo" style="color: black"/>
+                    <p:selectOneMenu filter="true"
+                                     value="#{mbSeguridad.mbModulos.cmbModulo}"
+                                     style="width: 310px">
+                        <f:selectItems value="#{mbSeguridad.mbModulos.lstModulos}"/>
+                        <f:converter converterId="CModulo"/>
+                        <p:ajax event="change" 
+                                listener="#{mbSeguridad.cargarInformacion()}"
+                                update="tblAcciones txtNombreAccion txtidAccion bnActualizar btnGuardarAcc"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Nombre Accion" style="color: black"/>
+                    <p:inputText id="txtNombreAccion" 
+                                 value="#{mbSeguridad.mbAccion.acciones.accion}" 
+                                 disabled="#{mbSeguridad.mbModulos.cmbModulo.idModulo==0}"
+                                 style="width: 300px"/>
+                    <p:outputLabel value="Nombre del id" style="color: black"/>
+                    <p:inputText  style="width: 300px" 
+                                  id="txtidAccion" 
+                                  value="#{mbSeguridad.mbAccion.acciones.id}" 
+                                  disabled="#{mbSeguridad.mbModulos.cmbModulo.idModulo==0}"/>
+                </h:panelGrid>
+                <br></br>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton icon="ui-icon-disk" 
+                                         id="btnGuardarAcc"
+                                         title="Guardar accion" 
+                                         process="@this txtNombreAccion txtidAccion"
+                                         update="msgModulo tblAcciones txtNombreAccion txtidAccion msgModulo"
+                                         actionListener="#{mbSeguridad.guardarAccion()}"
+                                         disabled="#{mbSeguridad.mbModulos.cmbModulo.idModulo==0}"
+                                         />
+                    </f:facet>
+                    <f:facet name="right" >
+                        <p:commandButton icon="ui-icon-pencil" 
+                                         id="bnActualizar"
+                                         title="Actualizar Accion" 
+                                         disabled="#{mbSeguridad.mbAccion.selecctionAccion == null}"
+                                         actionListener="#{mbSeguridad.dameInformacionAccion()}"
+                                         update="txtNombreAccion txtidAccion btnCancelar"/>
+                        <p:commandButton icon="ui-icon-cancel"
+                                         id="btnCancelar"
+                                         disabled="#{mbSeguridad.mbAccion.actualizar == false}"
+                                         actionListener="#{mbSeguridad.mbAccion.cancelar()}"
+                                         update="btnCancelar txtNombreAccion txtidAccion bnActualizar tblAcciones"/>
+                    </f:facet>
+                </p:toolbar>
+                <br></br>
+                <p:dataTable value="#{mbSeguridad.mbAccion.listaAcciones}" 
+                             var="accion"
+                             id="tblAcciones"
+                             emptyMessage="No hay accines para este módulo"
+                             scrollable="true"
+                             scrollHeight="200"
+                             style="width: 480px"
+                             selectionMode="single"
+                             rowKey="#{accion}"
+                             selection="#{mbSeguridad.mbAccion.selecctionAccion}"
+                             >
+                    <p:ajax  event="rowSelect"
+                             update=":form:form2:bnActualizar"
+                             />
+                    <p:column headerText="Accion">
+                        #{accion.accion}
+                    </p:column>
+                    <p:column headerText="Id Accion">
+                        #{accion.id}
+                    </p:column>
+                </p:dataTable>
+            </p:dialog>
+            <p:dialog widgetVar="dlgAsignarPerfil"
+                      header="Asignacion perfil usuario"
+                      showEffect="fold"
+                      hideEffect="fold"
+                      resizable="false"
+                      modal="true">
+                <p:messages  id="msgPerfiles" showDetail="true" autoUpdate="true" closable="true" />
+                <h:panelGrid columns="2">
+                    <p:outputLabel style="color: black" value="Perfiles :"/>
+                    <p:selectOneMenu value="#{mbSeguridad.mbPerfiles.cmbPerfil}" style="width: 300px">
+                        <f:selectItems value="#{mbSeguridad.mbPerfiles.lstPerfiles}"/>
+                        <f:converter converterId="Cperfiles"/>
+                        <p:ajax event="change" 
+                                listener="#{mbSeguridad.mbPerfiles.cargarAccesos()}"
+                                update="tableAcceso"
+                                process="@this"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel style="color: black" value="Usuarios :"/>
+                    <p:selectOneMenu style="width: 300px" 
+                                     value="#{mbSeguridad.mbUsuarios.cmbUsuario}"
+                                     id="cmbUsuariosNoAsignados"
+                                     disabled="#{mbSeguridad.mbPerfiles.mbAccesos.seleccion !=null}">
+                        <f:converter converterId="Cusuarios"/>
+                        <f:selectItems value="#{mbSeguridad.mbUsuarios.lstCmbUsuarios}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <br></br>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton icon="ui-icon-person" 
+                                         title="Asignar Perfil"
+                                         id="btnAsignarUsuarioPerfil"
+                                         actionListener="#{mbSeguridad.asignarPerfilUsuario()}"
+                                         disabled="#{mbSeguridad.mbPerfiles.mbAccesos.seleccion!=null}"
+                                         update="cmbUsuariosNoAsignados
+                                         msgPerfiles 
+                                         tableAcceso"
+                                         />
+                        <p:commandButton icon="ui-icon-pencil"
+                                         title="Actualizar Usuario"
+                                         disabled="#{mbSeguridad.mbPerfiles.mbAccesos.seleccion==null}"
+                                         id="btnActualizarPerfil"
+                                         action="#{mbSeguridad.mbPerfiles.actualizarAsignacionUsuarioPerfil()}"
+                                         update=":form:form2:btnCancelarAsigancion 
+                                         :form:form2:btnActualizarPerfil
+                                         :form:form2:tableAcceso
+                                         :form:form2:cmbUsuariosNoAsignados
+                                         :form:form2:btnAsignarUsuarioPerfil"
+                                         />
+                        <p:commandButton icon="ui-icon-cancel"
+                                         title="Cancelar Asignacion"
+                                         id="btnCancelarAsigancion"
+                                         disabled="#{mbSeguridad.mbPerfiles.mbAccesos.seleccion==null}"
+                                         actionListener="#{mbSeguridad.cancelarAccesos()}"
+                                         update=":form:form2:btnCancelarAsigancion 
+                                         :form:form2:btnActualizarPerfil
+                                         :form:form2:tableAcceso
+                                         :form:form2:cmbUsuariosNoAsignados
+                                         :form:form2:btnAsignarUsuarioPerfil"
+                                         />
+                    </f:facet>
+                </p:toolbar>
+                <p:dataTable emptyMessage="No hay Usuarios asignados a este perfil" 
+                             style="width: 360px"
+                             value="#{mbSeguridad.mbPerfiles.mbAccesos.lstAccesos}"
+                             var="acceso"
+                             id="tableAcceso"
+                             scrollable="true"
+                             scrollHeight="300"
+                             filteredValue="#{mbSeguridad.mbPerfiles.mbAccesos.fitlroAccesos}"
+                             selectionMode="single"
+                             selection="#{mbSeguridad.mbPerfiles.mbAccesos.seleccion}"
+                             rowKey="#{acceso}">
+                    <p:ajax event="rowSelect" 
+                            update=":form:form2:btnActualizarPerfil 
+                            :form:form2:cmbUsuariosNoAsignados
+                            :form:form2:btnCancelarAsigancion
+                            :form:form2:btnAsignarUsuarioPerfil"/>
+                    <f:facet name="header">
+                        Relacion de Usuarios asignados a este Perfil.
+                    </f:facet>
+                    <p:column filterBy="#{acceso.usuarios.usuario}" filterMatchMode="contains">
+                        #{acceso.usuarios.usuario}
+                    </p:column>
+
+                </p:dataTable>
+            </p:dialog>
+
+            <p:dialog widgetVar="dlgUsuario" 
+                      header="Altas Usuarios"
+                      modal="true"
+                      showEffect="fold"
+                      hideEffect="fold"
+                      resizable="false"
+                      height="500">
+                <p:messages  id="msgUsuarios" showDetail="true" autoUpdate="true" closable="true" />
+                <h:panelGrid columns="2"
+                             id="panelUsuarios">
+                    <p:outputLabel value="Cedis" style="color: black"/>
+                    <p:selectOneMenu id="cmbCedis" 
+                                     value="#{mbSeguridad.mbCedis.cmbCedis}"
+                                     style="width: 325px">
+                        <f:selectItems value="#{mbSeguridad.mbCedis.lstCedis}"/>
+                        <f:converter converterId="CCedis"/>
+                        <p:ajax event="change" 
+                                listener="#{mbSeguridad.cargarZonas()}"
+                                update="cmbZonas"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Zona" style="color: black"/>
+                    <p:selectOneMenu id="cmbZonas"
+                                     value="#{mbSeguridad.mbCedis.mbZonas.cmbZonas}"
+                                     style="width: 325px">
+                        <f:selectItems value="#{mbSeguridad.mbCedis.mbZonas.lstZonas}"/>
+                        <f:converter converterId="CZona"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Nombre : " style="color: black"/>
+                    <p:inputText value="#{mbSeguridad.mbUsuarios.usuario.usuario}" style="width: 315px"/>
+                    <p:outputLabel value="Login :" style="color: black"/>
+                    <p:inputText value="#{mbSeguridad.mbUsuarios.usuario.login}" style="width: 315px"/>
+                    <p:outputLabel value="Correo :" style="color: black"/>
+                    <p:inputText value="#{mbSeguridad.mbUsuarios.usuario.email}" style="width: 315px"/>
+                </h:panelGrid>
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton icon="ui-icon-disk" 
+                                         update="tableUsuarios msgUsuarios panelUsuarios" 
+                                         actionListener="#{mbSeguridad.guardarUsuario()}" 
+                                         />
+                        <p:commandButton icon="ui-icon-cancel" 
+                                         title="Actualizar Usuario"
+                                         id="btnActualizarUsuario"
+                                         actionListener="#{mbSeguridad.limpiarCamposUsuarios()}"
+                                         disabled="#{mbSeguridad.mbUsuarios.selccionUsuairo==null}"
+                                         update="tableUsuarios panelUsuarios btnActualizarUsuario"/>
+                        <p:commandButton icon="ui-icon-trash" 
+                                         title="EliminarUsuario"
+                                         id="btnEliminarUsuario"
+                                         disabled="#{mbSeguridad.mbUsuarios.selccionUsuairo==null}"/>
+                    </f:facet>
+                </p:toolbar> 
+                <br></br> 
+                <p:dataTable style="width: 400px"
+                             emptyMessage="No hay usuarios registrados"
+                             value="#{mbSeguridad.mbUsuarios.lstUsuarios}"
+                             var="lstUsuarios"
+                             scrollable="true" 
+                             scrollHeight="200"
+                             id="tableUsuarios"
+                             filteredValue="#{mbSeguridad.mbUsuarios.filtroUsuario}"
+                             selectionMode="single"
+                             selection="#{mbSeguridad.mbUsuarios.selccionUsuairo}"
+                             rowKey="#{lstUsuarios}"
+                             >
+                    <p:ajax event="rowSelect" 
+                            update=":form:form2:btnActualizarUsuario
+                            :form:form2:btnEliminarUsuario
+                            :form:form2:panelUsuarios
+                            :form:form2:msgUsuarios"
+                            listener="#{mbSeguridad.dameInformacionUsuarios()}"/>
+                    <f:facet name="header">
+                        Lista de usuarios registrados
+                    </f:facet>
+                    <p:column headerText="Nombre" filterMatchMode="contains" filterBy="#{lstUsuarios.usuario}" >
+                        #{lstUsuarios.usuario}
+                    </p:column>
+                    <p:column headerText="Usuario" filterMatchMode="contains" filterBy="#{lstUsuarios.login}">
+                        #{lstUsuarios.login}
+                    </p:column>
+                    <p:column headerText="Correo" >
+                        #{lstUsuarios.email}
+                    </p:column>
+                    <f:facet name="footer">
+                        Cantidad de usuarios registrados : #{mbUsuarios.lstUsuarios.size()}
+                    </f:facet>
+                </p:dataTable>
+            </p:dialog>
+            <p:dialog widgetVar="dlgCorreo"
+                      header="Configuracion de la cuenta de Correo Electronico"
+                      modal="true"
+                      showEffect="fold"
+                      hideEffect="fold"
+                      resizable="false">
+                <p:toolbar>
+                    <f:facet name="right">
+                        <p:commandButton icon="ui-icon-disk"/>
+                    </f:facet>
+                </p:toolbar>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Servidor de Correos :" style="color: black"/>
+                    <p:inputText/> 
+                    <p:outputLabel value="Correo:" style="color: black"/>
+                    <p:inputText/>
+                    <p:outputLabel value="Password:" style="color: black"/>
+                    <p:password feedback="true" inline="true"/>
+                    <p:outputLabel value="Puerto:" style="color: black"/>
+                    <p:inputText/>
+                    <p:outputLabel value="Protocolo" style="color: black"/>
+                    <p:inputText/> 
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </h:body>
+
+    <script>
+                                                         function finalizar() {
+                                                             PF('dlgModulos').hide();
+                                                         }
+    </script>
+
+
+</html>
+

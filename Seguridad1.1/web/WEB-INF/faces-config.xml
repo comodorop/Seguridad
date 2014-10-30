@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+    <converter>
+        <converter-id>Cusuarios</converter-id>
+        <converter-class>Usuarios.Converter.ConverterUsuarios</converter-class>
+    </converter>
+    
+    
+    <converter>
+        <converter-id>Cperfiles</converter-id>
+        <converter-class>perfiles.Converter.ConverterPerfil</converter-class>
+    </converter>
+    <converter>
+        <converter-id>CMenus</converter-id>
+        <converter-class>menus.Converter.ConverterMenu</converter-class>
+    </converter>
+    <converter>
+        <converter-id>CModulo</converter-id>
+        <converter-class>Modulos.Converter.ConverterModulo</converter-class>
+    </converter>
+    
+    <converter>
+        <converter-id>CCedis</converter-id>
+        <converter-class>Cedis.Converter.ConverterCedis</converter-class>
+    </converter>
+    
+    <converter>
+        <converter-id>CSubModulo</converter-id>
+        <converter-class>SubMenus.Converter.ConverterSubMenu</converter-class>
+    </converter>
+    <converter>
+        <converter-id>CBasesDatos</converter-id>
+        <converter-class>MbBaseDatos.Converter.ConverterBaseDatos</converter-class>
+    </converter>
+    <converter>
+        <converter-id>CZona</converter-id>
+        <converter-class>Zonas.Converter.ConverterZonas</converter-class>
+    </converter>
+</faces-config>

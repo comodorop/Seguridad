@@ -167,16 +167,14 @@ public class MbSeguridad implements Serializable {
                     mbUsuarios.getUsuario().setPass(utis.generarPasswordAleatorio(mbUsuarios.getUsuario().getUsuario()));
                     DAOUsuarios dao = new DAOUsuarios();
                     DAOCedis daoCedis = new DAOCedis(mbBasesDatos.getCmbBase().getJndi());
-                    if (mbUsuarios.getSelccionUsuairo().getIdUsuario() > 0) {
+                    if (mbUsuarios.getSelccionUsuairo() != null) {
                         dao.actualizarUsuario(mbUsuarios.getUsuario());
                         daoCedis.actualizarCedis(mbCedis.getCmbCedis().getIdCedis(), mbCedis.getMbZonas().getCmbZonas().getIdZona(), mbUsuarios.getUsuario().getIdUsuario());
                         Mensajes.Mensajes.MensajeSuccesP("Exito Usuario Modificado");
                     } else {
-                        if (mbUsuarios.getSelccionUsuairo().getIdUsuario() == 0) {
-                            int id = dao.guardarUsuario(mbUsuarios.getUsuario());
-                            daoCedis.guardarCedis(mbCedis.getCmbCedis().getIdCedis(), mbCedis.getMbZonas().getCmbZonas().getIdZona(), id);
-                            Mensajes.Mensajes.MensajeSuccesP("Nuevo usuario Registrado");
-                        }
+                        int id = dao.guardarUsuario(mbUsuarios.getUsuario());
+                        daoCedis.guardarCedis(mbCedis.getCmbCedis().getIdCedis(), mbCedis.getMbZonas().getCmbZonas().getIdZona(), id);
+                        Mensajes.Mensajes.MensajeSuccesP("Nuevo usuario Registrado");
                     }
                     limpiarCamposUsuarios();
                 } catch (SQLException ex) {
@@ -268,6 +266,10 @@ public class MbSeguridad implements Serializable {
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('dlgAsignarPerfil').show();");
         }
+    }
+
+    public void guardarAccionesModulos() {
+        mbArbol.guardarAcciones(mbBasesDatos.getCmbBase().getJndi(), mbArbol.getCmbPerfil().getIdPerfil());
     }
 
     public MbAccion getMbAccion() {

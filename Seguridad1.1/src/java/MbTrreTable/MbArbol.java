@@ -8,6 +8,7 @@ import Modulos.DAO.DAOModulos;
 import Modulos.Dominio.Modulo;
 import SubMenus.DAO.DAOSubMenu;
 import SubMenus.Dominio.SubMenu;
+import UsuarioPerfil.DAO.DAOUsuarioPerfil;
 import UsuarioPerfil.Dominio.UsuarioPerfil;
 import acciones.DAO.DAOAcciones;
 import acciones.DAO.DAOAccionesWebAnita;
@@ -34,26 +35,26 @@ import perfiles.Dominio.Perfiles;
 @ManagedBean
 @SessionScoped
 public class MbArbol implements Serializable {
-
+    
     private TreeNode root1;
     private TreeNode[] selectedNodes2;
     private Perfiles cmbPerfil = new Perfiles();
     private ArrayList<SelectItem> lstPerfiles;
-
+    
     public MbArbol() {
     }
-
+    
     public TreeNode getRoot1() {
         if (root1 == null) {
             root1 = crearTreeTable();
         }
         return root1;
     }
-
+    
     public void setRoot1(TreeNode root1) {
         this.root1 = root1;
     }
-
+    
     private TreeNode crearTreeTable() {
         root1 = new DefaultTreeNode(new Menu(0, "nuevo menu"), null);
         DAOMenus dao = new DAOMenus();
@@ -84,7 +85,7 @@ public class MbArbol implements Serializable {
         }
         return root1;
     }
-
+    
     public TreeNode crearTreeTable2(String jdni) {
         root1 = new DefaultTreeNode(new Menu(0, "nuevo menu"), null);
         try {
@@ -145,21 +146,22 @@ public class MbArbol implements Serializable {
             } catch (SQLException ex) {
                 Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);
         }
         return root1;
     }
-
-    public void dameInformacion() {
+    
+    public void guardarAcciones(String jndi, int idPerfil) {
+        ArrayList<Acciones> lstAcciones = new ArrayList<>();
+        DAOUsuarioPerfil dao = new DAOUsuarioPerfil(jndi);
         if (selectedNodes2 != null && selectedNodes2.length > 0) {
             StringBuilder builder = new StringBuilder();
             for (TreeNode node : selectedNodes2) {
                 try {
                     Acciones ac = (Acciones) node.getData();
-                    System.err.println(ac.getIdAccion());
-                    System.out.println(node.getData());
+                    lstAcciones.add(ac);
                 } catch (NullPointerException e) {
                 } catch (ClassCastException e) {
                 } catch (Exception e) {
@@ -167,25 +169,31 @@ public class MbArbol implements Serializable {
                 builder.append(node.getData().toString());
                 builder.append("<br />");
             }
+            try {
+                dao.guardarUsuarioPerfil(lstAcciones, idPerfil);
+            } catch (SQLException ex) {
+                Mensajes.Mensajes.mensajeErrorG(ex.getMessage());
+                Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-
+    
     public TreeNode[] getSelectedNodes2() {
         return selectedNodes2;
     }
-
+    
     public void setSelectedNodes2(TreeNode[] selectedNodes2) {
         this.selectedNodes2 = selectedNodes2;
     }
-
+    
     public Perfiles getCmbPerfil() {
         return cmbPerfil;
     }
-
+    
     public void setCmbPerfil(Perfiles cmbPerfil) {
         this.cmbPerfil = cmbPerfil;
     }
-
+    
     public ArrayList<SelectItem> getLstPerfiles() {
         if (lstPerfiles == null) {
             try {
@@ -200,11 +208,11 @@ public class MbArbol implements Serializable {
                 }
             } catch (SQLException ex) {
             }
-
+            
         }
         return lstPerfiles;
     }
-
+    
     public void setLstPerfiles(ArrayList<SelectItem> lstPerfiles) {
         this.lstPerfiles = lstPerfiles;
     }

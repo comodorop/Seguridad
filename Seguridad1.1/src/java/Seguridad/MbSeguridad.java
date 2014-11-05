@@ -85,6 +85,11 @@ public class MbSeguridad implements Serializable {
         mbCedis.getMbZonas().cargarZonas(mbCedis.getCmbCedis().getIdCedis(), mbBasesDatos.getCmbBase().getJndi());
     }
 
+    public void guardarPerfil() {
+        mbPerfiles.guardarPerfil();
+        mbArbol.setLstPerfiles(null);
+    }
+
     public MbArbol getMbArbol() {
         return mbArbol;
     }

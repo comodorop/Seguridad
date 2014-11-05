@@ -35,26 +35,26 @@ import perfiles.Dominio.Perfiles;
 @ManagedBean
 @SessionScoped
 public class MbArbol implements Serializable {
-    
+
     private TreeNode root1;
     private TreeNode[] selectedNodes2;
     private Perfiles cmbPerfil = new Perfiles();
     private ArrayList<SelectItem> lstPerfiles;
-    
+
     public MbArbol() {
     }
-    
+
     public TreeNode getRoot1() {
         if (root1 == null) {
             root1 = crearTreeTable();
         }
         return root1;
     }
-    
+
     public void setRoot1(TreeNode root1) {
         this.root1 = root1;
     }
-    
+
     private TreeNode crearTreeTable() {
         root1 = new DefaultTreeNode(new Menu(0, "nuevo menu"), null);
         DAOMenus dao = new DAOMenus();
@@ -85,7 +85,7 @@ public class MbArbol implements Serializable {
         }
         return root1;
     }
-    
+
     public TreeNode crearTreeTable2(String jdni) {
         root1 = new DefaultTreeNode(new Menu(0, "nuevo menu"), null);
         try {
@@ -146,13 +146,13 @@ public class MbArbol implements Serializable {
             } catch (SQLException ex) {
                 Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);
         }
         return root1;
     }
-    
+
     public void guardarAcciones(String jndi, int idPerfil) {
         ArrayList<Acciones> lstAcciones = new ArrayList<>();
         DAOUsuarioPerfil dao = new DAOUsuarioPerfil(jndi);
@@ -177,23 +177,23 @@ public class MbArbol implements Serializable {
             }
         }
     }
-    
+
     public TreeNode[] getSelectedNodes2() {
         return selectedNodes2;
     }
-    
+
     public void setSelectedNodes2(TreeNode[] selectedNodes2) {
         this.selectedNodes2 = selectedNodes2;
     }
-    
+
     public Perfiles getCmbPerfil() {
         return cmbPerfil;
     }
-    
+
     public void setCmbPerfil(Perfiles cmbPerfil) {
         this.cmbPerfil = cmbPerfil;
     }
-    
+
     public ArrayList<SelectItem> getLstPerfiles() {
         if (lstPerfiles == null) {
             try {
@@ -207,12 +207,13 @@ public class MbArbol implements Serializable {
                     lstPerfiles.add(new SelectItem(p, p.getPerfil()));
                 }
             } catch (SQLException ex) {
+                Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
             }
-            
+
         }
         return lstPerfiles;
     }
-    
+
     public void setLstPerfiles(ArrayList<SelectItem> lstPerfiles) {
         this.lstPerfiles = lstPerfiles;
     }

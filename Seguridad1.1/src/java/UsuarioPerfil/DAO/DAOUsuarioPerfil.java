@@ -48,6 +48,5 @@ public class DAOUsuarioPerfil {
             ps.close();
             cn.close();
         }
-
     }
 }

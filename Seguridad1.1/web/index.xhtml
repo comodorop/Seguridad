@@ -43,7 +43,10 @@
                             <p:menuitem value="Asigancion de perfiles" 
                                         icon="ui-icon-person"
                                         actionListener="#{mbSeguridad.mensajeAvisoAcceso()}"
-                                       />
+                                        />
+                        </p:submenu>
+                        <p:submenu label="Perfiles">
+                            <p:menuitem value="Nuevo Perfil" oncomplete="PF('dlgPerfiles').show();"/>
                         </p:submenu>
                         <p:submenu label="Configuracion">
                             <p:menuitem value="Cuenta de Correo"
@@ -60,7 +63,9 @@
                                  id="treeT"
                                  >
                         <f:facet name="header">
-                            <p:selectOneMenu value="#{mbSeguridad.mbBasesDatos.cmbBase}">
+                            <p:selectOneMenu value="#{mbSeguridad.mbBasesDatos.cmbBase}" 
+                                             style="width: 250px"
+                                             filter="true">
                                 <f:selectItems value="#{mbSeguridad.mbBasesDatos.lst}"/>
                                 <f:converter converterId="CBasesDatos"/>
                                 <p:ajax event="change" 

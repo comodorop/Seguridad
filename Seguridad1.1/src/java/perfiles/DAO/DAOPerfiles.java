@@ -72,4 +72,28 @@ public class DAOPerfiles {
             st.close();
         }
     }
+
+    public void guardarPerfil(Perfiles perfil) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "INSERT INTO perfiles (perfil) VALUES ('" + perfil.getPerfil() + "')";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
+    }
+
+    public void actualizarPerfil(Perfiles perfil) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "UPDATE perfiles set perfil ='" + perfil.getPerfil() + "' WHERE idPerfil = '" + perfil.getIdPerfil() + "'";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
+    }
 }

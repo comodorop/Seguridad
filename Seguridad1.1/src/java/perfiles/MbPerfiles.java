@@ -27,6 +27,9 @@ public class MbPerfiles implements Serializable {
 
     private ArrayList<SelectItem> lstPerfiles;
     private Perfiles cmbPerfil = new Perfiles();
+    private ArrayList<Perfiles> lstPerfil = null;
+    private Perfiles seleccionPerfil = null;
+    private Perfiles perfil = new Perfiles();
     @ManagedProperty(value = "#{mbAccesos}")
     private MbAccesos mbAccesos = new MbAccesos();
 
@@ -89,5 +92,85 @@ public class MbPerfiles implements Serializable {
 
     public void setCmbPerfil(Perfiles cmbPerfil) {
         this.cmbPerfil = cmbPerfil;
+    }
+
+    public ArrayList<Perfiles> getLstPerfil() {
+        if (lstPerfil == null) {
+            try {
+                DAOPerfiles dao = new DAOPerfiles();
+                lstPerfil = dao.damePerfiles();
+            } catch (SQLException ex) {
+                Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                Logger.getLogger(MbPerfiles.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return lstPerfil;
+    }
+
+    public boolean validar() {
+        boolean ok = false;
+        if (perfil.getPerfil().equals("")) {
+            Mensajes.Mensajes.MensajeAlertP("Se requiere un perfil");
+        } else {
+            ok = true;
+        }
+        return ok;
+    }
+
+    public void enviarInformacion() {
+        this.setPerfil(seleccionPerfil);
+    }
+
+    public void guardarPerfil() {
+        boolean ok = validar();
+        if (ok == true) {
+            DAOPerfiles dao = new DAOPerfiles();
+            if (seleccionPerfil == null) {
+                try {
+                    dao.guardarPerfil(perfil);
+                    Mensajes.Mensajes.MensajeSuccesP("Exito, nuevo perfil disponible");
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                    Logger.getLogger(MbPerfiles.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    dao.actualizarPerfil(perfil);
+                    Mensajes.Mensajes.MensajeSuccesP("Perfil actualizado satisfactoriamente");
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                    Logger.getLogger(MbPerfiles.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            lstPerfil = null;
+            cmbPerfil = null;
+            limpiar();
+            
+        }
+    }
+
+    public void limpiar() {
+        perfil = new Perfiles();
+        seleccionPerfil = null;
+    }
+
+    public void setLstPerfil(ArrayList<Perfiles> lstPerfil) {
+        this.lstPerfil = lstPerfil;
+    }
+
+    public Perfiles getSeleccionPerfil() {
+        return seleccionPerfil;
+    }
+
+    public void setSeleccionPerfil(Perfiles seleccionPerfil) {
+        this.seleccionPerfil = seleccionPerfil;
+    }
+
+    public Perfiles getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfiles perfil) {
+        this.perfil = perfil;
     }
 }

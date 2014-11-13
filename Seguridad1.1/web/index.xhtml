@@ -65,11 +65,14 @@
                         <f:facet name="header">
                             <p:selectOneMenu value="#{mbSeguridad.mbBasesDatos.cmbBase}" 
                                              style="width: 250px"
-                                             filter="true">
+                                             filter="true"
+                                             id="cmbBaseDatos">
                                 <f:selectItems value="#{mbSeguridad.mbBasesDatos.lst}"/>
                                 <f:converter converterId="CBasesDatos"/>
                                 <p:ajax event="change" 
-                                        update="cmbPerfil"/>
+                                        update="cmbPerfil :form:treeT"
+                                        listener="#{mbSeguridad.crearTreeTable()}"
+                                        process="@this treeT cmbPerfil"/>
                             </p:selectOneMenu>
                             &nbsp;&nbsp;
                             <p:selectOneMenu value="#{mbSeguridad.mbArbol.cmbPerfil}" 
@@ -81,7 +84,7 @@
                                 <f:converter converterId="Cperfiles"/>
                                 <p:ajax event="change" 
                                         listener="#{mbSeguridad.crearTreeTable()}"
-                                        process="@this treeT"
+                                        process="@this treeT cmbBaseDatos"
                                         update=":form:treeT"/>
                             </p:selectOneMenu>
                         </f:facet>
@@ -89,9 +92,11 @@
                             <h:outputText value="#{document}"/>
                         </p:column>
                     </p:treeTable>
-                    <p:commandButton value="Obtener informacion"
+                    <p:commandButton value="Guardar Permisos"
+                                     icon="ui-icon-disk"
                                      actionListener="#{mbSeguridad.guardarAccionesModulos()}"
-                                     process="@this treeT"/>
+                                     process="@this treeT"
+                                     update="growl"/>
                 </p:layoutUnit>
             </p:layout>
             <ui:include src="dialogs.xhtml"/>

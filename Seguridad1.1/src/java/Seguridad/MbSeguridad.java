@@ -73,7 +73,13 @@ public class MbSeguridad implements Serializable {
     }
 
     public void crearTreeTable() {
-        mbArbol.crearTreeTable2(mbBasesDatos.getCmbBase().getJndi());
+        if (mbBasesDatos.getCmbBase().getIdBaseDatos() > 0 && mbArbol.getCmbPerfil().getIdPerfil() > 0) {
+            mbArbol.crearTreeTable2(mbBasesDatos.getCmbBase().getJndi());
+        }
+        else{
+         mbArbol.setRoot1(null); 
+         mbArbol.setRoot1(mbArbol.crearTreeTable());
+        }
     }
 
     public void cancelarAccesos() {

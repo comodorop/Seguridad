@@ -18,11 +18,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 import menus.DAO.DAOMenus;
 import menus.Dominio.Menu;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import perfiles.DAO.DAOPerfiles;
@@ -55,7 +57,7 @@ public class MbArbol implements Serializable {
         this.root1 = root1;
     }
 
-    private TreeNode crearTreeTable() {
+    public TreeNode crearTreeTable() {
         root1 = new DefaultTreeNode(new Menu(0, "nuevo menu"), null);
         DAOMenus dao = new DAOMenus();
         DAOSubMenu daoSubMenu = new DAOSubMenu();
@@ -170,11 +172,15 @@ public class MbArbol implements Serializable {
                 builder.append("<br />");
             }
             try {
-                dao.guardarUsuarioPerfil(lstAcciones, idPerfil);
+                    dao.guardarUsuarioPerfil(lstAcciones, idPerfil);
+                    Mensajes.Mensajes.mensajeSuccesG("Se guardaron los cambios exitosamente.");
             } catch (SQLException ex) {
                 Mensajes.Mensajes.mensajeErrorG(ex.getMessage());
                 Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Se requiere por lo menos un modulo y una accion");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
         }
     }
 

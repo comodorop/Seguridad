@@ -21,13 +21,17 @@ import javax.faces.model.SelectItem;
  */
 @ManagedBean
 @SessionScoped
-public class MbBasesDatos implements Serializable{
+public class MbBasesDatos implements Serializable {
 
     /**
      * Creates a new instance of MbBasesDatos
      */
     private ArrayList<SelectItem> lst = null;
     private BasesDeDatos cmbBase = new BasesDeDatos();
+    private ArrayList<BasesDeDatos> lstDisponibles;
+    private ArrayList<BasesDeDatos> lstElegidas;
+    private BasesDeDatos seleccionBaseDisponibles;
+    private BasesDeDatos seleccionBaseElegidas;
 
     public MbBasesDatos() {
     }
@@ -63,10 +67,55 @@ public class MbBasesDatos implements Serializable{
     public void setCmbBase(BasesDeDatos cmbBase) {
         this.cmbBase = cmbBase;
     }
-    
-    
-    
-    
-    
-    
+
+    public ArrayList<BasesDeDatos> getLstDisponibles() {
+        if (lstDisponibles == null && lstElegidas == null) {
+            DAOBaseDatos dao = new DAOBaseDatos();
+            try {
+                lstElegidas = dao.dameBaseDatos();
+                lstDisponibles = dao.dameListaBds();
+                for (BasesDeDatos b : lstDisponibles) {
+                    for (BasesDeDatos b2 : lstElegidas) {
+                        if (b.getBaseDatos().equals(b2.getBaseDatos())) {
+                            lstDisponibles.remove(b);
+                            break;
+                        }
+                    }
+                }
+
+            } catch (SQLException ex) {
+                Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                Logger.getLogger(MbBasesDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return lstDisponibles;
+    }
+
+    public void setLstDisponibles(ArrayList<BasesDeDatos> lstDisponibles) {
+        this.lstDisponibles = lstDisponibles;
+    }
+
+    public ArrayList<BasesDeDatos> getLstElegidas() {
+        return lstElegidas;
+    }
+
+    public void setLstElegidas(ArrayList<BasesDeDatos> lstElegidas) {
+        this.lstElegidas = lstElegidas;
+    }
+
+    public BasesDeDatos getSeleccionBaseDisponibles() {
+        return seleccionBaseDisponibles;
+    }
+
+    public void setSeleccionBaseDisponibles(BasesDeDatos seleccionBaseDisponibles) {
+        this.seleccionBaseDisponibles = seleccionBaseDisponibles;
+    }
+
+    public BasesDeDatos getSeleccionBaseElegidas() {
+        return seleccionBaseElegidas;
+    }
+
+    public void setSeleccionBaseElegidas(BasesDeDatos seleccionBaseElegidas) {
+        this.seleccionBaseElegidas = seleccionBaseElegidas;
+    }
 }

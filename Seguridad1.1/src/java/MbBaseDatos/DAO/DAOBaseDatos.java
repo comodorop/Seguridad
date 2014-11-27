@@ -75,4 +75,32 @@ public class DAOBaseDatos {
         }
         return b;
     }
+
+    public ArrayList<BasesDeDatos> dameListaBds() throws SQLException {
+        ArrayList<BasesDeDatos> lista = new ArrayList<>();
+        Connection cn = ds.getConnection();
+        Statement preparedStatement = cn.createStatement();
+        ResultSet cursorBases = null;
+        cn.setAutoCommit(false);
+        try {
+            cursorBases = preparedStatement.executeQuery("exec sp_databases");
+            int id = 1;
+            while (cursorBases.next()) {
+                BasesDeDatos bds = new BasesDeDatos();
+                bds.setIdBaseDatos(id);
+                bds.setBaseDatos(cursorBases.getString("DATABASE_NAME"));
+                lista.add(bds);
+                id++;
+            }
+            cn.commit();
+        } catch (SQLException e) {
+            cn.rollback();
+            throw e;
+        } finally {
+            preparedStatement.close();
+            cursorBases.close();
+            cn.close();
+        }
+        return lista;
+    }
 }

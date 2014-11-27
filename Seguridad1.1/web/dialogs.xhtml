@@ -448,7 +448,45 @@
                     </p:column> 
                 </p:dataTable>
             </p:dialog>
-
+            <p:dialog widgetVar="dlgBaseDatos" 
+                      header="Bases de Datos"
+                      resizable="false">
+                <br></br>
+                <div style="width: 600px">
+                    <div style="width: 45%; float: left">
+                        <p:dataTable value="#{mbSeguridad.mbBasesDatos.lstDisponibles}"
+                                     var="tableBaseDatos"
+                                     selectionMode="single"
+                                     selection="#{mbSeguridad.mbBasesDatos.seleccionBaseDisponibles}"
+                                     rowKey="#{tableBaseDatos}"
+                                    >
+                            <p:column headerText="Empresas Disponibles">
+                                #{tableBaseDatos.baseDatos}
+                            </p:column>
+                        </p:dataTable> 
+                    </div>
+                    <div style="width: 10%; float: left">
+                        <center>
+                            <p:commandButton icon="ui-icon-arrowthickstop-1-e"
+                                             title="Dar de alta Empresa"/>
+                            <br></br>
+                            <p:commandButton icon="ui-icon-arrowthickstop-1-w"
+                                             title="Dar de baja Empresa"/>
+                        </center>
+                    </div>
+                    <div style="width: 45%; float: left">
+                        <p:dataTable value="#{mbSeguridad.mbBasesDatos.lstElegidas}"
+                                     var="tablaDatosElegidos"
+                                     selectionMode="single"
+                                     selection="#{mbSeguridad.mbBasesDatos.seleccionBaseElegidas}"
+                                     rowKey="#{tablaDatosElegidos}">
+                            <p:column headerText="Empresas dadas de alta">
+                                #{tablaDatosElegidos.baseDatos}
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </p:dialog>
         </h:form>
     </h:body>
 

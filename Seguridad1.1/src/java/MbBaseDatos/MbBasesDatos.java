@@ -68,21 +68,29 @@ public class MbBasesDatos implements Serializable {
         this.cmbBase = cmbBase;
     }
 
+    public void desmarcarOrigen() {
+        seleccionBaseDisponibles = null;
+    }
+
+    public void desmarcarDestino() {
+        seleccionBaseElegidas = null;
+    }
+
     public ArrayList<BasesDeDatos> getLstDisponibles() {
         if (lstDisponibles == null && lstElegidas == null) {
             DAOBaseDatos dao = new DAOBaseDatos();
             try {
                 lstElegidas = dao.dameBaseDatos();
                 lstDisponibles = dao.dameListaBds();
-                for (BasesDeDatos b : lstDisponibles) {
-                    for (BasesDeDatos b2 : lstElegidas) {
-                        if (b.getBaseDatos().equals(b2.getBaseDatos())) {
-                            lstDisponibles.remove(b);
+                for (int x = 0; x < lstDisponibles.size(); x++) {
+                    for (int y = 0; y < lstElegidas.size(); y++) {
+                        if (lstDisponibles.get(x).getBaseDatos().equals(lstElegidas.get(y).getBaseDatos())) {
+                            lstDisponibles.remove(x);
+                            x--;
                             break;
                         }
                     }
                 }
-
             } catch (SQLException ex) {
                 Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
                 Logger.getLogger(MbBasesDatos.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,11 +99,60 @@ public class MbBasesDatos implements Serializable {
         return lstDisponibles;
     }
 
+    public void guardarNuevaBaseDatos() {
+        DAOBaseDatos dao = new DAOBaseDatos();
+        try {
+            dao.guardarNuevaBaseDatos(seleccionBaseDisponibles);
+            Mensajes.Mensajes.MensajeSuccesP("Nueva base disponible");
+            seleccionBaseElegidas = null;
+            seleccionBaseDisponibles = null;
+            lstDisponibles = null;
+            lstElegidas = null;
+        } catch (SQLException ex) {
+            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+            Logger.getLogger(MbBasesDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void eliminarBaseDatos() {
+        DAOBaseDatos dao = new DAOBaseDatos();
+        try {
+            dao.eliminarBase(seleccionBaseElegidas.getIdBaseDatos());
+            Mensajes.Mensajes.MensajeSuccesP("Base de datos eliminada");
+            seleccionBaseElegidas = null;
+            seleccionBaseDisponibles = null;
+            lstDisponibles = null;
+            lstElegidas = null;
+        } catch (SQLException ex) {
+            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+            Logger.getLogger(MbBasesDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void setLstDisponibles(ArrayList<BasesDeDatos> lstDisponibles) {
         this.lstDisponibles = lstDisponibles;
     }
 
     public ArrayList<BasesDeDatos> getLstElegidas() {
+        if (lstDisponibles == null && lstElegidas == null) {
+            DAOBaseDatos dao = new DAOBaseDatos();
+            try {
+                lstElegidas = dao.dameBaseDatos();
+                lstDisponibles = dao.dameListaBds();
+                for (int x = 0; x < lstDisponibles.size(); x++) {
+                    for (int y = 0; y < lstElegidas.size(); y++) {
+                        if (lstDisponibles.get(x).getBaseDatos().equals(lstElegidas.get(y).getBaseDatos())) {
+                            lstDisponibles.remove(x);
+                            x--;
+                            break;
+                        }
+                    }
+                }
+            } catch (SQLException ex) {
+                Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                Logger.getLogger(MbBasesDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return lstElegidas;
     }
 

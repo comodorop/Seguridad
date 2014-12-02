@@ -450,7 +450,9 @@
             </p:dialog>
             <p:dialog widgetVar="dlgBaseDatos" 
                       header="Bases de Datos"
-                      resizable="false">
+                      resizable="false"
+                      modal="true">
+                <p:messages  id="mensajeBase" showDetail="true" autoUpdate="true" closable="true" />
                 <br></br>
                 <div style="width: 600px">
                     <div style="width: 45%; float: left">
@@ -459,7 +461,11 @@
                                      selectionMode="single"
                                      selection="#{mbSeguridad.mbBasesDatos.seleccionBaseDisponibles}"
                                      rowKey="#{tableBaseDatos}"
-                                    >
+                                     id="tableDisponibles"
+                                     >
+                            <p:ajax event="rowSelect" 
+                                    listener="#{mbSeguridad.mbBasesDatos.desmarcarDestino()}" 
+                                    update=":form:form2:tablaDestino :form:form2:btnIzquierda :form:form2:btnDerecha" />
                             <p:column headerText="Empresas Disponibles">
                                 #{tableBaseDatos.baseDatos}
                             </p:column>
@@ -468,10 +474,26 @@
                     <div style="width: 10%; float: left">
                         <center>
                             <p:commandButton icon="ui-icon-arrowthickstop-1-e"
-                                             title="Dar de alta Empresa"/>
+                                             title="Dar de alta Empresa"
+                                             disabled="#{mbSeguridad.mbBasesDatos.seleccionBaseDisponibles==null}"
+                                             id="btnIzquierda"
+                                             actionListener="#{mbSeguridad.mbBasesDatos.guardarNuevaBaseDatos()}"
+                                             update=":form:form2:mensajeBase 
+                                             :form:form2:tablaDestino 
+                                             :form:form2:tableDisponibles 
+                                             :form:form2:tablaDestino
+                                             :form:form2:btnIzquierda"/>
                             <br></br>
                             <p:commandButton icon="ui-icon-arrowthickstop-1-w"
-                                             title="Dar de baja Empresa"/>
+                                             title="Dar de baja Empresa"
+                                             disabled="#{mbSeguridad.mbBasesDatos.seleccionBaseElegidas == null}"
+                                             id="btnDerecha"
+                                             actionListener="#{mbSeguridad.mbBasesDatos.eliminarBaseDatos()}"
+                                             update=":form:form2:mensajeBase 
+                                             :form:form2:tablaDestino
+                                             :form:form2:btnDerecha
+                                             :form:form2:tableDisponibles 
+                                             :form:form2:tablaDestino"/>
                         </center>
                     </div>
                     <div style="width: 45%; float: left">
@@ -479,7 +501,13 @@
                                      var="tablaDatosElegidos"
                                      selectionMode="single"
                                      selection="#{mbSeguridad.mbBasesDatos.seleccionBaseElegidas}"
-                                     rowKey="#{tablaDatosElegidos}">
+                                     rowKey="#{tablaDatosElegidos}"
+                                     id="tablaDestino">
+                            <p:ajax event="rowSelect" 
+                                    listener="#{mbSeguridad.mbBasesDatos.desmarcarOrigen()}" 
+                                    update=":form:form2:tableDisponibles 
+                                    :form:form2:btnIzquierda 
+                                    :form:form2:btnDerecha"/>
                             <p:column headerText="Empresas dadas de alta">
                                 #{tablaDatosElegidos.baseDatos}
                             </p:column>

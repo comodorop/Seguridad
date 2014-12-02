@@ -103,4 +103,30 @@ public class DAOBaseDatos {
         }
         return lista;
     }
+
+    public void guardarNuevaBaseDatos(BasesDeDatos seleccionBaseDisponibles) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "INSERT INTO basesDeDatos (baseDeDatos, jndi) VALUES ('" + seleccionBaseDisponibles.getBaseDatos() + "', 'jdbc/__" + seleccionBaseDisponibles.getBaseDatos() + "')";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
+
+
+    }
+
+    public void eliminarBase(int idBaseDatos) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "DELETE FROM basesDeDatos WHERE idBaseDeDatos = '" + idBaseDatos + "'";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
+    }
 }

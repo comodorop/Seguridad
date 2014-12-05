@@ -26,6 +26,7 @@ public class MbSubMenu implements Serializable {
 
     private ArrayList<SelectItem> lstSubmenus = null;
     private SubMenu cmbSubMenu = new SubMenu();
+    private SubMenu subMenu = new SubMenu();
 
     /**
      * Creates a new instance of MbSubMenu
@@ -68,5 +69,13 @@ public class MbSubMenu implements Serializable {
 
     public void setCmbSubMenu(SubMenu cmbSubMenu) {
         this.cmbSubMenu = cmbSubMenu;
+    }
+
+    public SubMenu getSubMenu() {
+        return subMenu;
+    }
+
+    public void setSubMenu(SubMenu subMenu) {
+        this.subMenu = subMenu;
     }
 }

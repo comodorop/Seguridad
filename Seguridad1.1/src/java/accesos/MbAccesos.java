@@ -6,6 +6,7 @@ package accesos;
 
 import accesos.DAOAccesos.DAOAccesos;
 import accesos.Dominio.Accesos;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class MbAccesos {
+public class MbAccesos implements Serializable {
 
     /**
      * Creates a new instance of MbAccesos

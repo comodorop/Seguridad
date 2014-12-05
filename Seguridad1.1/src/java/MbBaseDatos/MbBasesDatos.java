@@ -108,6 +108,7 @@ public class MbBasesDatos implements Serializable {
             seleccionBaseDisponibles = null;
             lstDisponibles = null;
             lstElegidas = null;
+            lst = null;
         } catch (SQLException ex) {
             Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
             Logger.getLogger(MbBasesDatos.class.getName()).log(Level.SEVERE, null, ex);
@@ -123,6 +124,7 @@ public class MbBasesDatos implements Serializable {
             seleccionBaseDisponibles = null;
             lstDisponibles = null;
             lstElegidas = null;
+            lst = null;
         } catch (SQLException ex) {
             Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
             Logger.getLogger(MbBasesDatos.class.getName()).log(Level.SEVERE, null, ex);

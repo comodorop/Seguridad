@@ -32,6 +32,7 @@ public class MbMenus implements Serializable {
     private Menu cmbMenu = new Menu();
     @ManagedProperty(value = "#{mbSubMenu}")
     private MbSubMenu mbSubMenu = new MbSubMenu();
+    private Menu menu = new Menu();
 
     public MbMenus() {
     }
@@ -78,5 +79,13 @@ public class MbMenus implements Serializable {
 
     public void setMbSubMenu(MbSubMenu mbSubMenu) {
         this.mbSubMenu = mbSubMenu;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }

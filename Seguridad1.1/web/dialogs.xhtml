@@ -26,12 +26,14 @@
                           >
                     <p:tab title="Módulo" id="tab0">
                         <p:panel header="Datos del Módulo" id="panelModulo">
-                            <h:panelGrid columns="2">
+                            <h:panelGrid columns="3">
                                 <p:outputLabel value="Módulo:"  style="color: black"/>
                                 <p:inputText value="#{mbSeguridad.mbModulos.modulo.modulo}"  
                                              style="width: 250px" />
+                                <h:outputLabel/>
                                 <p:outputLabel value="Url:" style="color: black"/>
                                 <p:inputText value="#{mbSeguridad.mbModulos.modulo.url}"  style="width: 250px"/>
+                                <h:outputLabel/>
                                 <p:outputLabel value="Menu:" style="color: black"/> 
                                 <p:selectOneMenu style="width: 260px"
                                                  id="cmbModulos"
@@ -41,15 +43,20 @@
                                     <f:converter converterId="CMenus"/>
                                     <p:ajax event="change" 
                                             listener="#{mbSeguridad.dameSubMenus()}" 
-                                            update="cmbSubMenu"/>
+                                            update="cmbSubMenu txtMenu"/>
                                 </p:selectOneMenu>
+                                <p:commandButton icon="ui-icon-plus" 
+                                                 title="Nuevo menu" 
+                                                 oncomplete="PF('dlgMenu').show();"/>
                                 <p:outputLabel value="Sub Menu:" style="color: black"/>
                                 <p:selectOneMenu style="width: 260px"
                                                  id="cmbSubMenu"
                                                  value="#{mbSeguridad.mbMenus.mbSubMenu.cmbSubMenu}">
                                     <f:selectItems value="#{mbSeguridad.mbMenus.mbSubMenu.lstSubmenus}"/>
                                     <f:converter converterId="CSubModulo"/>
+                                    <p:ajax update="txtSubmenu"/>
                                 </p:selectOneMenu>
+                                <p:commandButton icon="ui-icon-plus" title="Nuevo Sub menu" oncomplete="PF('dlgSubMenu').show();"/>
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
@@ -478,22 +485,27 @@
                                              disabled="#{mbSeguridad.mbBasesDatos.seleccionBaseDisponibles==null}"
                                              id="btnIzquierda"
                                              actionListener="#{mbSeguridad.mbBasesDatos.guardarNuevaBaseDatos()}"
-                                             update=":form:form2:mensajeBase 
+                                             update=":form:treeT:cmbBaseDatos
+                                             :form:form2:mensajeBase 
                                              :form:form2:tablaDestino 
                                              :form:form2:tableDisponibles 
                                              :form:form2:tablaDestino
-                                             :form:form2:btnIzquierda"/>
+                                             :form:form2:btnIzquierda
+                                             "/>
                             <br></br>
                             <p:commandButton icon="ui-icon-arrowthickstop-1-w"
                                              title="Dar de baja Empresa"
                                              disabled="#{mbSeguridad.mbBasesDatos.seleccionBaseElegidas == null}"
                                              id="btnDerecha"
                                              actionListener="#{mbSeguridad.mbBasesDatos.eliminarBaseDatos()}"
-                                             update=":form:form2:mensajeBase 
+                                             update="
+                                             :form:treeT:cmbBaseDatos
+                                             :form:form2:mensajeBase 
                                              :form:form2:tablaDestino
                                              :form:form2:btnDerecha
                                              :form:form2:tableDisponibles 
-                                             :form:form2:tablaDestino"/>
+                                             :form:form2:tablaDestino"
+                                             />
                         </center>
                     </div>
                     <div style="width: 45%; float: left">
@@ -514,6 +526,30 @@
                         </p:dataTable>
                     </div>
                 </div>
+            </p:dialog>
+            <p:dialog widgetVar="dlgMenu" 
+                      header="Módulo menu"
+                      resizable="false"
+                      modal="true">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Menú" style="color: black"/>
+                    <p:inputText id="txtMenu" value="#{mbSeguridad.mbMenus.menu.menu}"/>
+                </h:panelGrid>
+                <center>
+                    <p:commandButton icon="ui-icon-disk"/>
+                </center>
+            </p:dialog>
+            <p:dialog widgetVar="dlgSubMenu" 
+                      header="Módulo submenu"
+                      resizable="false"
+                      modal="true">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Menú" style="color: black"/>
+                    <p:inputText id="txtSubmenu" value="#{mbSeguridad.mbMenus.mbSubMenu.subMenu.subMenu}"/>
+                </h:panelGrid>
+                <center>
+                    <p:commandButton icon="ui-icon-disk"/>
+                </center>
             </p:dialog>
         </h:form>
     </h:body>

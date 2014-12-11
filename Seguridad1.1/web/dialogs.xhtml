@@ -43,11 +43,13 @@
                                     <f:converter converterId="CMenus"/>
                                     <p:ajax event="change" 
                                             listener="#{mbSeguridad.dameSubMenus()}" 
-                                            update="cmbSubMenu txtMenu"/>
+                                            update="cmbSubMenu txtMenu btnSubmenu"/>
                                 </p:selectOneMenu>
                                 <p:commandButton icon="ui-icon-plus" 
                                                  title="Nuevo menu" 
-                                                 oncomplete="PF('dlgMenu').show();"/>
+                                                 oncomplete="PF('dlgMenu').show();"
+                                                 actionListener="#{mbSeguridad.pasarInformacionMenu()}"
+                                                 update="txtMenu"/>
                                 <p:outputLabel value="Sub Menu:" style="color: black"/>
                                 <p:selectOneMenu style="width: 260px"
                                                  id="cmbSubMenu"
@@ -56,7 +58,13 @@
                                     <f:converter converterId="CSubModulo"/>
                                     <p:ajax update="txtSubmenu"/>
                                 </p:selectOneMenu>
-                                <p:commandButton icon="ui-icon-plus" title="Nuevo Sub menu" oncomplete="PF('dlgSubMenu').show();"/>
+                                <p:commandButton icon="ui-icon-plus" 
+                                                 title="Nuevo Sub menu" 
+                                                 id="btnSubmenu"
+                                                 disabled="#{mbSeguridad.mbMenus.cmbMenu.idMenu==0}"
+                                                 actionListener="#{mbSeguridad.pasarInformacionSubMenu()}"
+                                                 oncomplete="PF('dlgSubMenu').show();"
+                                                 update="txtSubmenu"/>
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
@@ -531,24 +539,30 @@
                       header="Módulo menu"
                       resizable="false"
                       modal="true">
+                 <p:messages id="msgMenu" showDetail="true" autoUpdate="true" closable="true" />
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Menú" style="color: black"/>
                     <p:inputText id="txtMenu" value="#{mbSeguridad.mbMenus.menu.menu}"/>
                 </h:panelGrid>
                 <center>
-                    <p:commandButton icon="ui-icon-disk"/>
+                    <p:commandButton icon="ui-icon-disk" 
+                                     actionListener="#{mbSeguridad.guardarMenu()}" 
+                                     update="msgMenu cmbModulos txtMenu"/>
                 </center>
             </p:dialog>
             <p:dialog widgetVar="dlgSubMenu" 
                       header="Módulo submenu"
                       resizable="false"
                       modal="true">
+                 <p:messages id="msgSubMenu" showDetail="true" autoUpdate="true" closable="true" />
                 <h:panelGrid columns="2">
-                    <p:outputLabel value="Menú" style="color: black"/>
+                    <p:outputLabel value="Sub Menu" style="color: black"/>
                     <p:inputText id="txtSubmenu" value="#{mbSeguridad.mbMenus.mbSubMenu.subMenu.subMenu}"/>
                 </h:panelGrid>
                 <center>
-                    <p:commandButton icon="ui-icon-disk"/>
+                    <p:commandButton icon="ui-icon-disk" 
+                                     actionListener="#{mbSeguridad.guardarSubMenu()}" 
+                                     update="msgSubMenu txtSubmenu cmbSubMenu"/>
                 </center>
             </p:dialog>
         </h:form>

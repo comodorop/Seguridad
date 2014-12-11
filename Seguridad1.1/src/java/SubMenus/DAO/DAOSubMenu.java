@@ -68,4 +68,28 @@ public class DAOSubMenu {
         }
         return subMenu;
     }
+
+    public void guardarSubMenu(SubMenu subMenu) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "INSERT INTO modulosSubMenus (subMenu, idMenu) VALUES ('" + subMenu.getSubMenu() + "','" + subMenu.getIdMenu() + "')";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
+    }
+
+    public void actualizarSubMenu(SubMenu subMenu) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "UPDATE modulosSubMenus set subMenu = '" + subMenu.getSubMenu() + "' WHERE idSubMenu ='" + subMenu.getIdSubMenu() + "' and idMenu='" + subMenu.getIdMenu() + "'";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
+    }
 }

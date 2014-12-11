@@ -61,6 +61,42 @@ public class MbMenus implements Serializable {
         return listaMenus;
     }
 
+    public void guardarMenus() {
+        boolean ok = validar();
+        if (ok == true) {
+            DAOMenus dao = new DAOMenus();
+            if (menu.getIdMenu() > 0) {
+                try {
+                    dao.actualizarMenu(menu);
+                    Mensajes.Mensajes.MensajeSuccesP("Menu modificado");
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeSuccesP(ex.getMessage());
+                    Logger.getLogger(MbMenus.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    dao.guardarMenu(menu);
+                    Mensajes.Mensajes.MensajeSuccesP("Nuevo menu disponible");
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeSuccesP(ex.getMessage());
+                    Logger.getLogger(MbMenus.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            menu.setIdMenu(0);
+            menu.setMenu("");
+        }
+    }
+
+    public boolean validar() {
+        boolean ok = false;
+        if (menu.getMenu().equals("")) {
+            Mensajes.Mensajes.MensajeAlertP("Se requiere un el nombre del menu.");
+        } else {
+            ok = true;
+        }
+        return ok;
+    }
+
     public void setLstMenu(ArrayList<SelectItem> lstMenu) {
         this.lstMenu = lstMenu;
     }

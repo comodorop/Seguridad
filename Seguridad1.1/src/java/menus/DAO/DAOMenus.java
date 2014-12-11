@@ -58,8 +58,34 @@ public class DAOMenus {
                 menu.setMenu(rs.getString("menu"));
             }
         } finally {
+            st.close();
             cn.close();
         }
         return menu;
+    }
+
+    public void actualizarMenu(Menu menu) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "UPDATE modulosMenus set menu='" + menu.getMenu() + "' WHERE idMenu='" + menu.getIdMenu() + "'";
+
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
+    }
+
+    public void guardarMenu(Menu menu) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "INSERT INTO modulosMenus (menu) VALUES('" + menu.getMenu() + "')";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            st.close();
+            cn.close();
+        }
     }
 }

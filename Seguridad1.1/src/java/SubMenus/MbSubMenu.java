@@ -59,6 +59,41 @@ public class MbSubMenu implements Serializable {
         }
     }
 
+    public void guardar(int idMenu) {
+        boolean ok = validar();
+        if (ok == true) {
+            DAOSubMenu dao = new DAOSubMenu();
+            subMenu.setIdMenu(idMenu);
+            if (subMenu.getIdSubMenu() == 0) {
+                try {
+                    dao.guardarSubMenu(subMenu);
+                    Mensajes.Mensajes.MensajeSuccesP("Nuevo sub menu disponible");
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeSuccesP(ex.getMessage());
+                    Logger.getLogger(MbSubMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    dao.actualizarSubMenu(subMenu);
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeSuccesP(ex.getMessage());
+                    Logger.getLogger(MbSubMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Mensajes.Mensajes.MensajeSuccesP("Sub menu actualizado correctamente");
+            }
+        }
+    }
+
+    public boolean validar() {
+        boolean ok = false;
+        if (subMenu.getSubMenu().equals("")) {
+            Mensajes.Mensajes.MensajeAlertP("Se requiere el nombre del sub menu");
+        } else {
+            ok = true;
+        }
+        return ok;
+    }
+
     public void setLstSubmenus(ArrayList<SelectItem> lstSubmenus) {
         this.lstSubmenus = lstSubmenus;
     }

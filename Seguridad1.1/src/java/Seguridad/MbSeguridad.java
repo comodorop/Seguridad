@@ -255,6 +255,7 @@ public class MbSeguridad implements Serializable {
             dao.guardarModulosConAcciones(mbModulos.getModulo(), mbAccion.getListaAcciones());
             Mensajes.Mensajes.mensajeSuccesG("Exito.. Nuevo modulo Disponible");
             mbArbol.crearTreeTable2(mbBasesDatos.getCmbBase().getJndi());
+            mbModulos.setLstModulos(null);
         } catch (SQLException ex) {
             Mensajes.Mensajes.MensajeAlertP(ex.getMessage());
             Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);

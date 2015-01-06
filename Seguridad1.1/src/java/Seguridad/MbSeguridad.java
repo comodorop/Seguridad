@@ -62,6 +62,11 @@ public class MbSeguridad implements Serializable {
     private MbAccesos mbAccesos = new MbAccesos();
 
     public MbSeguridad() {
+//        RequestContext context = RequestContext.getCurrentInstance();
+//        context.execute("PF('dlgAcceso').show();");
+//        System.out.println("--------------------");
+//        System.out.println("Entro a cargar al constructor pero nada");
+//        System.out.println("--------------------------");
         mbModulos.getModulo().setModulo("modulo");
         mbModulos.getModulo().setUrl("url");
     }

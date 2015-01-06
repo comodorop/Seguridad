@@ -10,19 +10,25 @@
     <h:body>
         <h:form>
             <center>
-                <p:panelGrid columns="2" >
-                    <f:facet name="header">
-                        Acceso al sistema
-                    </f:facet>
-                    <h:outputLabel value="Contraseña:"/>
-                    <p:password />
-                    <f:facet name="footer">
-                        <center>
-                            <p:commandButton  
-                                value="Entrar"/> 
-                        </center>
-                    </f:facet>
-                </p:panelGrid>
+                <div style="position: absolute;
+                     left: 50%;
+                     top: 50%;
+                     transform: translate(-50%, -50%);
+                     -webkit-transform: translate(-50%, -50%);">
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <h:panelGrid columns="2">
+                        <f:facet name="header">
+                            ACCESO AL SISTEMA
+                        </f:facet>
+                        <h:outputLabel value="Contraseña:"/>
+                        <p:password id="psw" value="#{mbLogin.login.password}" />
+                        <p:commandButton  
+                            value="Entrar" 
+                            action="#{mbLogin.accesoSistema()}"
+                            
+                            ajax="false"/> 
+                    </h:panelGrid>
+                </div>
             </center>
         </h:form>
     </h:body>

@@ -81,7 +81,7 @@ public class DAOBaseDatos {
         Connection cn = ds.getConnection();
         Statement preparedStatement = cn.createStatement();
         ResultSet cursorBases = null;
-        cn.setAutoCommit(false);
+//        cn.setAutoCommit(false);
         try {
             cursorBases = preparedStatement.executeQuery("exec sp_databases");
             int id = 1;
@@ -92,9 +92,9 @@ public class DAOBaseDatos {
                 lista.add(bds);
                 id++;
             }
-            cn.commit();
+//            cn.commit();
         } catch (SQLException e) {
-            cn.rollback();
+//            cn.rollback();
             throw e;
         } finally {
             preparedStatement.close();

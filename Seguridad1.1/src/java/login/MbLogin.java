@@ -25,11 +25,13 @@ public class MbLogin {
     @ManagedProperty(value = "#{usuarioSesion}")
     private UsuarioSesion usuarioSesion = new UsuarioSesion();
     private Login login = new Login();
+    private boolean usuario = false;
 
     /**
      * Creates a new instance of MbLogin
      */
     public MbLogin() {
+        usuario = validarUsuario();
     }
 
     public Login getLogin() {
@@ -43,20 +45,34 @@ public class MbLogin {
     public String accesoSistema() {
         String url = "";
         boolean ok = validar();
+        DAOLogin dao = new DAOLogin();
         if (ok) {
-            try {
-                DAOLogin dao = new DAOLogin();
-                Login log = dao.validarAcceso(login);
-                if (log.getPassword().equals("")) {
-                    url = "login.xhtml";
-                    Mensajes.Mensajes.MensajeAlertP("Acceso denegado");
-                } else {
-                    usuarioSesion.setPassword(log.getPassword());
-                    url = "index.xhtml";
+            if (usuario == true) {
+                try {
+                    Login log = dao.validarAcceso(login);
+                    if (log.getPassword().equals("")) {
+                        url = "login.xhtml";
+                        Mensajes.Mensajes.MensajeAlertP("Acceso denegado");
+                    } else {
+                        usuarioSesion.setPassword(log.getPassword());
+                        url = "index.xhtml";
+                    }
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (SQLException ex) {
-                Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
-                Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                try {
+                    dao.guardarNuevoUsuario(login);
+                    usuarioSesion.setPassword(login.getPassword());
+                } catch (SQLException ex) {
+                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                url = "index.xhtml";
             }
         }
 
@@ -73,11 +89,32 @@ public class MbLogin {
         return ok;
     }
 
+    public boolean validarUsuario() {
+        boolean ok = false;
+        DAOLogin dao = new DAOLogin();
+        try {
+            ok = dao.verificarUsuarioDisponible();
+        } catch (SQLException ex) {
+            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+            Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return ok;
+    }
+
     public UsuarioSesion getUsuarioSesion() {
         return usuarioSesion;
     }
 
     public void setUsuarioSesion(UsuarioSesion usuarioSesion) {
         this.usuarioSesion = usuarioSesion;
+    }
+
+    public boolean isUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(boolean usuario) {
+        this.usuario = usuario;
     }
 }

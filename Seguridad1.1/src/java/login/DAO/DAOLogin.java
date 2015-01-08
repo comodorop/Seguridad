@@ -56,4 +56,29 @@ public class DAOLogin {
         }
         return log;
     }
+
+    public boolean verificarUsuarioDisponible() throws SQLException {
+        boolean ok = false;
+        Connection cn = ds.getConnection();
+        String nombre = "";
+        String sql = "SELECT * FROM accesoAdministrativo";
+        Statement st = cn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            nombre = rs.getString("password");
+        }
+        if (nombre.equals("")) {
+            ok = false;
+        } else {
+            ok = true;
+        }
+        return ok;
+    }
+
+    public void guardarNuevoUsuario(Login login) throws SQLException, Exception {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "INSERT INTO accesoAdministrativo (password) VALUES ('" + Utilerias.Utilerias.md5(login.getPassword()) + "')";
+        st.executeUpdate(sql);
+    }
 }

@@ -24,7 +24,7 @@ import javax.faces.model.SelectItem;
  */
 @ManagedBean
 @SessionScoped
-public class MbCedis implements Serializable{
+public class MbCedis implements Serializable {
 
     private ArrayList<SelectItem> lstCedis = null;
     @ManagedProperty(value = "#{mbZonas}")
@@ -52,6 +52,14 @@ public class MbCedis implements Serializable{
         } catch (SQLException ex) {
             Mensajes.Mensajes.mensajeErrorG(ex.getMessage());
             Logger.getLogger(MbCedis.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+
+            System.out.println(ex.getMessage());
+
+
+
+
+
         }
     }
 
@@ -61,11 +69,10 @@ public class MbCedis implements Serializable{
             Mensajes.Mensajes.MensajeAlertP("Seleccione un Cedis");
         } else if (mbZonas.getCmbZonas().getIdZona() == 0) {
             Mensajes.Mensajes.MensajeAlertP("Seleccione una zona");
-        }
-        else{
+        } else {
             ok = true;
         }
-        return ok ;
+        return ok;
     }
 
     public ArrayList<SelectItem> getLstCedis() {

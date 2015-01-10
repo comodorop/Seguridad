@@ -60,7 +60,9 @@
                         <p:submenu  label="Salir">
                             <p:menuitem value="Cerrar Sesion"
                                         icon="ui-icon-home"
-                                        title="Cerrar sesión"/>
+                                        title="Cerrar sesión"
+                                        ajax="false"
+                                        action="#{mbSeguridad.logout()}"/>
                         </p:submenu>
                     </p:panelMenu>
                 </p:layoutUnit>

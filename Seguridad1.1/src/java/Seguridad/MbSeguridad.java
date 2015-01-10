@@ -28,6 +28,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+import login.dominio.UsuarioSesion;
 import menus.MbMenus;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
@@ -253,6 +257,25 @@ public class MbSeguridad implements Serializable {
         mbAccion.setSelecctionAccion(null);
     }
 
+    
+    public String logout() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        HttpSession httpSession = (HttpSession) externalContext.getSession(false);
+        
+        UsuarioSesion usuarioSesion = (UsuarioSesion) httpSession.getAttribute("usuarioSesion");
+        if (usuarioSesion == null) {
+            usuarioSesion = new UsuarioSesion();
+            httpSession.setAttribute("usuarioSesion", usuarioSesion);
+        } else if(usuarioSesion.getUsuario()!=null) {
+            usuarioSesion.setUsuario(null);
+        }
+        usuarioSesion.setJndi("jdbc/__webSystem");
+        httpSession.invalidate();
+        return "login.xhtml";
+    }
+    
+    
     public void guardar() {
         DAOSeguridad dao = new DAOSeguridad();
         try {

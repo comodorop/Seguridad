@@ -20,6 +20,25 @@
                               closable="true" 
                               collapsible="true">
                     <p:panelMenu style="width:200px">
+                        <p:submenu label="Base de Datos">
+                            <p:menuitem value="Base de datos" oncomplete="PF('dlgBaseDatos').show();"/>
+                        </p:submenu>
+                        <p:submenu label="Usuarios">
+                            <p:menuitem value="Nuevo Usuario" 
+                                        id="itemNvUsuario"
+                                        icon="ui-icon-document"
+                                        actionListener="#{mbSeguridad.mensajeAviso()}"
+                                        update=":form:form2:cmbCedis"
+                                        process="@this"
+                                        />
+                            <p:menuitem value="Asigancion de perfiles" 
+                                        icon="ui-icon-person"
+                                        actionListener="#{mbSeguridad.mensajeAvisoAcceso()}"
+                                        />
+                        </p:submenu>
+                        <p:submenu label="Perfiles">
+                            <p:menuitem value="Nuevo Perfil" oncomplete="PF('dlgPerfiles').show();"/>
+                        </p:submenu>
                         <p:submenu label="Mantenimiento de Módulos">
                             <p:menuitem value="Nuevos Módulo"  
                                         icon="ui-icon-document" 
@@ -33,28 +52,15 @@
                                         oncomplete="PF('dlgAcciones').show()"
                                         icon="ui-icon-document" />
                         </p:submenu>
-                        <p:submenu label="Usuarios">
-                            <p:menuitem value="Nuevo Usuario" 
-                                        id="itemNvUsuario"
-                                        icon="ui-icon-document"
-                                        actionListener="#{mbSeguridad.mensajeAviso()}"
-                                        update=":form:form2:cmbCedis"
-                                        />
-                            <p:menuitem value="Asigancion de perfiles" 
-                                        icon="ui-icon-person"
-                                        actionListener="#{mbSeguridad.mensajeAvisoAcceso()}"
-                                        />
-                        </p:submenu>
-                        <p:submenu label="Perfiles">
-                            <p:menuitem value="Nuevo Perfil" oncomplete="PF('dlgPerfiles').show();"/>
-                        </p:submenu>
-                        <p:submenu label="Base de Datos">
-                            <p:menuitem value="Base de datos" oncomplete="PF('dlgBaseDatos').show();"/>
-                        </p:submenu>
                         <p:submenu label="Configuracion">
                             <p:menuitem value="Cuenta de Correo"
                                         icon="ui-icon-mail-closed"
                                         oncomplete="PF('dlgCorreo').show();"/>
+                        </p:submenu>
+                        <p:submenu  label="Salir">
+                            <p:menuitem value="Cerrar Sesion"
+                                        icon="ui-icon-home"
+                                        title="Cerrar sesión"/>
                         </p:submenu>
                     </p:panelMenu>
                 </p:layoutUnit>

@@ -478,10 +478,10 @@
                                      selectionMode="single"
                                      selection="#{mbSeguridad.mbBasesDatos.seleccionBaseDisponibles}"
                                      rowKey="#{tableBaseDatos}"
-                                     id="tableDisponibles"
-                                     >
+                                     id="tableDisponibles">
                             <p:ajax event="rowSelect" 
                                     listener="#{mbSeguridad.mbBasesDatos.desmarcarDestino()}" 
+                                    process="@this"
                                     update=":form:form2:tablaDestino :form:form2:btnIzquierda :form:form2:btnDerecha" />
                             <p:column headerText="Empresas Disponibles">
                                 #{tableBaseDatos.baseDatos}

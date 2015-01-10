@@ -52,7 +52,7 @@ public class Filtro implements Filter {
         }
         if (destino.endsWith("/")) {
             chain.doFilter(request, response);
-        } else if (usuarioSesion.getUsuario() == null && !destino.contains("login.xhtml")) {
+        } else if (usuarioSesion.getPassword() == null && !destino.contains("login.xhtml")) {
             httpResponse.sendRedirect("/Seguridad1.1/faces/login.xhtml");
         } else {
             request.setCharacterEncoding("UTF-8");

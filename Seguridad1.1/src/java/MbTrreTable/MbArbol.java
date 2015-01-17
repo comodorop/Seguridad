@@ -22,6 +22,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
+import javax.naming.NamingException;
 import menus.DAO.DAOMenus;
 import menus.Dominio.Menu;
 import org.primefaces.context.RequestContext;
@@ -150,7 +151,11 @@ public class MbArbol implements Serializable {
             }
 
         } catch (SQLException ex) {
+            Mensajes.Mensajes.mensajeErrorG(ex.getMessage());
             Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            
+            Mensajes.Mensajes.mensajeErrorG("Error al conectarse a la base de datos (Verificar el Pool o el WEB.XML)");
         }
         return root1;
     }
@@ -172,8 +177,8 @@ public class MbArbol implements Serializable {
                 builder.append("<br />");
             }
             try {
-                    dao.guardarUsuarioPerfil(lstAcciones, idPerfil);
-                    Mensajes.Mensajes.mensajeSuccesG("Se guardaron los cambios exitosamente.");
+                dao.guardarUsuarioPerfil(lstAcciones, idPerfil);
+                Mensajes.Mensajes.mensajeSuccesG("Se guardaron los cambios exitosamente.");
             } catch (SQLException ex) {
                 Mensajes.Mensajes.mensajeErrorG(ex.getMessage());
                 Logger.getLogger(MbArbol.class.getName()).log(Level.SEVERE, null, ex);

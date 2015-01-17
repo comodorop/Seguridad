@@ -83,7 +83,7 @@
                                 <p:ajax event="change" 
                                         update="cmbPerfil :form:treeT"
                                         listener="#{mbSeguridad.crearTreeTable()}"
-                                        process="@this treeT cmbPerfil"/>
+                                        process="@this treeT cmbPerfil :form:growl"/>
                             </p:selectOneMenu>
                             &nbsp;&nbsp;
                             <p:selectOneMenu value="#{mbSeguridad.mbArbol.cmbPerfil}" 
@@ -96,7 +96,8 @@
                                 <p:ajax event="change" 
                                         listener="#{mbSeguridad.crearTreeTable()}"
                                         process="@this treeT cmbBaseDatos"
-                                        update=":form:treeT"/>
+                                        update=":form:treeT
+                                        :form:growl"/>
                             </p:selectOneMenu>
                         </f:facet>
                         <p:column>
@@ -107,7 +108,8 @@
                                      icon="ui-icon-disk"
                                      actionListener="#{mbSeguridad.guardarAccionesModulos()}"
                                      process="@this treeT"
-                                     update="growl"/>
+                                     update="growl"
+                                     title="Guardar Acciones"/>
                 </p:layoutUnit>
             </p:layout>
             <ui:include src="dialogs.xhtml"/>

@@ -23,13 +23,9 @@ public class DAOAccionesWebAnita {
 
     DataSource ds;
 
-    public DAOAccionesWebAnita(String jndi) {
-        try {
-            Context cI = new InitialContext();
-            ds = (DataSource) cI.lookup("java:comp/env/" + jndi);
-        } catch (NamingException ex) {
-            System.err.println(ex.getMessage());
-        }
+    public DAOAccionesWebAnita(String jndi) throws NamingException {
+        Context cI = new InitialContext();
+        ds = (DataSource) cI.lookup("java:comp/env/" + jndi);
     }
 
     public ArrayList<UsuarioPerfil> dameAccionesPerfil(int idModulo, int idPerfil) throws SQLException {
@@ -51,9 +47,7 @@ public class DAOAccionesWebAnita {
             st.close();
             rs.close();
             cn.close();
-
         }
-
         return lstPerfil;
     }
 
@@ -64,7 +58,7 @@ public class DAOAccionesWebAnita {
         Statement st = cn.createStatement();
         ResultSet rs = null;
         try {
-             rs = st.executeQuery(sql);
+            rs = st.executeQuery(sql);
             while (rs.next()) {
                 UsuarioPerfil usuario = new UsuarioPerfil();
                 usuario.setIdAccion(rs.getInt("idAccion"));

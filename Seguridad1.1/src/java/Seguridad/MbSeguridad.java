@@ -20,6 +20,8 @@ import Zonas.Dominio.Zonas;
 import accesos.MbAccesos;
 import acciones.MbAccion;
 import acciones.dominio.Acciones;
+import correos.MbCorreos;
+import correos.dao.DAOCorreos;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -35,6 +37,7 @@ import login.dominio.UsuarioSesion;
 import menus.MbMenus;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
+import perfiles.Dominio.Perfiles;
 import perfiles.MbPerfiles;
 //import org.primefaces.event.FlowEvent;
 
@@ -64,10 +67,23 @@ public class MbSeguridad implements Serializable {
     private MbPerfiles mbPerfiles = new MbPerfiles();
     @ManagedProperty(value = "#{mbAccesos}")
     private MbAccesos mbAccesos = new MbAccesos();
+    @ManagedProperty(value = "#{mbCorreos}")
+    private MbCorreos mbCorreos = new MbCorreos();
 
     public MbSeguridad() {
-//        RequestContext context = RequestContext.getCurrentInstance();
-//        context.execute("PF('dlgAcceso').show();");
+//        DAOCorreos dao = new DAOCorreos();
+//        try {
+//            boolean ok = dao.verificar();
+//            if (ok == false) {
+//                RequestContext context = RequestContext.getCurrentInstance();
+//                context.execute("PF('dlgCorreo').show();");
+//            }
+//        } catch (SQLException ex) {
+//            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+//            Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
+
 //        System.out.println("--------------------");
 //        System.out.println("Entro a cargar al constructor pero nada");
 //        System.out.println("--------------------------");
@@ -82,6 +98,7 @@ public class MbSeguridad implements Serializable {
     }
 
     public void crearTreeTable() {
+
         if (mbBasesDatos.getCmbBase().getIdBaseDatos() > 0 && mbArbol.getCmbPerfil().getIdPerfil() > 0) {
             mbArbol.crearTreeTable2(mbBasesDatos.getCmbBase().getJndi());
         } else {
@@ -121,6 +138,7 @@ public class MbSeguridad implements Serializable {
     public void guardarPerfil() {
         mbPerfiles.guardarPerfil();
         mbArbol.setLstPerfiles(null);
+        mbPerfiles.setPerfil(new Perfiles());
     }
 
     public MbArbol getMbArbol() {
@@ -257,25 +275,23 @@ public class MbSeguridad implements Serializable {
         mbAccion.setSelecctionAccion(null);
     }
 
-    
     public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         HttpSession httpSession = (HttpSession) externalContext.getSession(false);
-        
+
         UsuarioSesion usuarioSesion = (UsuarioSesion) httpSession.getAttribute("usuarioSesion");
         if (usuarioSesion == null) {
             usuarioSesion = new UsuarioSesion();
             httpSession.setAttribute("usuarioSesion", usuarioSesion);
-        } else if(usuarioSesion.getUsuario()!=null) {
+        } else if (usuarioSesion.getUsuario() != null) {
             usuarioSesion.setUsuario(null);
         }
         usuarioSesion.setJndi("jdbc/__webSystem");
         httpSession.invalidate();
         return "login.xhtml";
     }
-    
-    
+
     public void guardar() {
         DAOSeguridad dao = new DAOSeguridad();
         try {
@@ -327,7 +343,12 @@ public class MbSeguridad implements Serializable {
     }
 
     public void guardarAccionesModulos() {
-        mbArbol.guardarAcciones(mbBasesDatos.getCmbBase().getJndi(), mbArbol.getCmbPerfil().getIdPerfil());
+        if (mbBasesDatos.getCmbBase().getIdBaseDatos() != 0 && mbArbol.getCmbPerfil().getIdPerfil() != 0) {
+            mbArbol.guardarAcciones(mbBasesDatos.getCmbBase().getJndi(), mbArbol.getCmbPerfil().getIdPerfil());
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Se requiere que selecciones una base de datos  y un perfil");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        }
     }
 
     public MbAccion getMbAccion() {
@@ -376,5 +397,13 @@ public class MbSeguridad implements Serializable {
 
     public void setMbAccesos(MbAccesos mbAccesos) {
         this.mbAccesos = mbAccesos;
+    }
+
+    public MbCorreos getMbCorreos() {
+        return mbCorreos;
+    }
+
+    public void setMbCorreos(MbCorreos mbCorreos) {
+        this.mbCorreos = mbCorreos;
     }
 }

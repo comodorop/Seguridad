@@ -81,6 +81,7 @@
                                                      update=":form:growl :form:form2:cmbModulos1"
                                                      oncomplete="finalizar();"
                                                      onclick="PF('wiz').loadStep('tab0', false);"
+                                                     title="Guardar accion"
                                                      />
                                 </f:facet>
                                 <f:facet name="right">
@@ -88,12 +89,14 @@
                                                      update="tablaAccion txtAccion txtIdAccion btnGuardarAccion"
                                                      actionListener="#{mbSeguridad.agregarAcciones()}"
                                                      process="@this txtAccion txtIdAccion"
+                                                     title="Agregar acción"
                                                      />
                                     <p:commandButton id="btnEliminarAc"
                                                      icon="ui-icon-trash" 
                                                      disabled="#{mbSeguridad.mbAccion.selecctionAccion == null}"
                                                      actionListener="#{mbSeguridad.eliminarAccion()}"
-                                                     update="btnEliminarAc tablaAccion btnGuardarAccion"/>
+                                                     update="btnEliminarAc tablaAccion btnGuardarAccion"
+                                                     title="Eliminar accion"/>
                                 </f:facet>
                             </p:toolbar>
                             <h:panelGrid columns="2">
@@ -188,7 +191,8 @@
                                          id="btnCancelar"
                                          disabled="#{mbSeguridad.mbAccion.actualizar == false}"
                                          actionListener="#{mbSeguridad.mbAccion.cancelar()}"
-                                         update="btnCancelar txtNombreAccion txtidAccion bnActualizar tblAcciones"/>
+                                         update="btnCancelar txtNombreAccion txtidAccion bnActualizar tblAcciones"
+                                         title="Cancelar"/>
                     </f:facet>
                 </p:toolbar>
                 <br></br>
@@ -397,6 +401,7 @@
                       showEffect="fold"
                       hideEffect="fold"
                       resizable="false">
+                <p:messages  id="msgCorreos" showDetail="true" autoUpdate="true" closable="true" />
                 <p:toolbar>
                     <f:facet name="right">
                         <p:commandButton icon="ui-icon-disk"/>
@@ -422,6 +427,10 @@
                       header="Mantenimiento Perfiles"
                       resizable="false"
                       modal="true">
+                <p:ajax event="close" listener="#{mbSeguridad.mbPerfiles.limpiar()}" 
+                        update=":form:form2:txtPerfil
+                        :form:form2:tablaPerfiles 
+                        :form:form2:btnActualizarP" />
                 <p:messages  id="mensajesPerfiles" showDetail="true" autoUpdate="true" closable="true" />
                 <h:panelGrid columns="2">
                     <p:outputLabel style="color: black" value="Perfil :"/>
@@ -436,6 +445,7 @@
                                          :form:form2:tablaPerfiles 
                                          :form:form2:btnActualizarP 
                                          :form:form2:tablaPerfiles 
+                                         :form:form2:txtPerfil
                                          :form:treeT:cmbPerfil"/>
                     </f:facet>
                     <f:facet name="right">
@@ -549,6 +559,7 @@
                 <center>
                     <p:commandButton icon="ui-icon-disk" 
                                      actionListener="#{mbSeguridad.guardarMenu()}" 
+                                     title="Guardar menu"
                                      update="msgMenu cmbModulos txtMenu"/>
                 </center>
             </p:dialog>
@@ -564,12 +575,13 @@
                 <center>
                     <p:commandButton icon="ui-icon-disk" 
                                      actionListener="#{mbSeguridad.guardarSubMenu()}" 
+                                     title="Guardar Sub menu"
                                      update="msgSubMenu txtSubmenu cmbSubMenu"/>
                 </center>
             </p:dialog>
 
 
-            
+
 
         </h:form>
     </h:body>

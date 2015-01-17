@@ -43,6 +43,11 @@ public class MbPerfiles implements Serializable {
         }
     }
 
+//    public void limpiarPerfiles() {
+//        perfil = new Perfiles();
+//        seleccionPerfil = 
+//    }
+
     public ArrayList<SelectItem> getLstPerfiles() {
         if (lstPerfiles == null) {
             lstPerfiles = new ArrayList<>();
@@ -145,7 +150,7 @@ public class MbPerfiles implements Serializable {
             lstPerfil = null;
             cmbPerfil = null;
             limpiar();
-            
+
         }
     }
 

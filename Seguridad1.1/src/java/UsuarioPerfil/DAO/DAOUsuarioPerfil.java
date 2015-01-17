@@ -45,6 +45,7 @@ public class DAOUsuarioPerfil {
                 ps.executeUpdate();
             }
         } finally {
+            st.close();
             ps.close();
             cn.close();
         }

@@ -22,6 +22,7 @@ import acciones.MbAccion;
 import acciones.dominio.Acciones;
 import correos.MbCorreos;
 import correos.dao.DAOCorreos;
+import correos.dominio.Correos;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -69,10 +70,17 @@ public class MbSeguridad implements Serializable {
     private MbAccesos mbAccesos = new MbAccesos();
     @ManagedProperty(value = "#{mbCorreos}")
     private MbCorreos mbCorreos = new MbCorreos();
+    private Correos correo = null;
 
     public MbSeguridad() {
+
+        mbModulos.getModulo().setModulo("modulo");
+        mbModulos.getModulo().setUrl("url");
+
 //        DAOCorreos dao = new DAOCorreos();
 //        try {
+//            
+//            
 //            boolean ok = dao.verificar();
 //            if (ok == false) {
 //                RequestContext context = RequestContext.getCurrentInstance();
@@ -82,13 +90,6 @@ public class MbSeguridad implements Serializable {
 //            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
 //            Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
-
-//        System.out.println("--------------------");
-//        System.out.println("Entro a cargar al constructor pero nada");
-//        System.out.println("--------------------------");
-        mbModulos.getModulo().setModulo("modulo");
-        mbModulos.getModulo().setUrl("url");
     }
 
     public void asignarPerfilUsuario() {
@@ -284,8 +285,8 @@ public class MbSeguridad implements Serializable {
         if (usuarioSesion == null) {
             usuarioSesion = new UsuarioSesion();
             httpSession.setAttribute("usuarioSesion", usuarioSesion);
-        } else if (usuarioSesion.getUsuario() != null) {
-            usuarioSesion.setUsuario(null);
+        } else if (usuarioSesion.getPassword() != null) {
+            usuarioSesion.setPassword(null);
         }
         usuarioSesion.setJndi("jdbc/__webSystem");
         httpSession.invalidate();
@@ -406,4 +407,14 @@ public class MbSeguridad implements Serializable {
     public void setMbCorreos(MbCorreos mbCorreos) {
         this.mbCorreos = mbCorreos;
     }
+
+    public Correos getCorreo() {
+
+        return correo;
+    }
+
+    public void setCorreo(Correos correo) {
+        this.correo = correo;
+    }
+
 }

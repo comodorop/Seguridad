@@ -5,7 +5,10 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title></title>
+        <script>
+            
+        </script>
     </h:head>
     <h:body>
         <h:form id="form2">
@@ -404,20 +407,23 @@
                 <p:messages  id="msgCorreos" showDetail="true" autoUpdate="true" closable="true" />
                 <p:toolbar>
                     <f:facet name="right">
-                        <p:commandButton icon="ui-icon-disk"/>
+                        <p:commandButton icon="ui-icon-disk" 
+                                         title="Guardar datos correo"
+                                         actionListener="#{mbSeguridad.mbCorreos.guardar()}"
+                                         />
                     </f:facet>
                 </p:toolbar>
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Servidor de Correos :" style="color: black"/>
-                    <p:inputText/> 
+                    <p:inputText value="#{mbSeguridad.mbCorreos.correo.servidor}"/> 
                     <p:outputLabel value="Correo:" style="color: black"/>
-                    <p:inputText/>
+                    <p:inputText value="#{mbSeguridad.mbCorreos.correo.correo}"/>
                     <p:outputLabel value="Password:" style="color: black"/>
-                    <p:password feedback="true" inline="true"/>
+                    <p:password feedback="true" inline="true" value="#{mbSeguridad.mbCorreos.correo.password}"/>
                     <p:outputLabel value="Puerto:" style="color: black"/>
-                    <p:inputText/>
+                    <p:inputText value="#{mbSeguridad.mbCorreos.correo.puerto}"/>
                     <p:outputLabel value="Protocolo" style="color: black"/>
-                    <p:inputText/> 
+                    <p:inputText value="#{mbSeguridad.mbCorreos.correo.protocolo}"/> 
                 </h:panelGrid>
             </p:dialog>
 

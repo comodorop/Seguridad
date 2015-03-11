@@ -17,7 +17,7 @@ public class UsuarioSesion {
 
     private String password;
     private String jndi;
-    private String usuario;
+//    private String usuario;
 
     /**
      * Creates a new instance of UsuarioSession
@@ -40,12 +40,12 @@ public class UsuarioSesion {
     public void setJndi(String jndi) {
         this.jndi = jndi;
     }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
+//
+//    public String getUsuario() {
+//        return usuario;
+//    }
+//
+//    public void setUsuario(String usuario) {
+//        this.usuario = usuario;
+//    }
 }

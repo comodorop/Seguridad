@@ -4,6 +4,7 @@
  */
 package correos.dao;
 
+import correos.dominio.Correos;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,7 +46,7 @@ public class DAOCorreos {
             }
         } finally {
             st.close();
-            rs.close();
+//            rs.close();
             cn.close();
         }
         if (valor <= 0) {
@@ -54,5 +55,18 @@ public class DAOCorreos {
             ok = true;
         }
         return ok;
+    }
+
+    public void guardarCorreo(Correos correo) throws SQLException {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "INSERT INTO correos (servidor, correo, password, puerto, protocolo) VALUES ('" + correo.getServidor() + "', '" + correo.getCorreo() + "', '" + correo.getPassword() + "', '" + correo.getPuerto() + "', '" + correo.getProtocolo() + "')";
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            cn.close();
+            st.close();
+        }
+
     }
 }

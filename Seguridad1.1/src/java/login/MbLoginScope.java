@@ -1,19 +1,15 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package login;
 
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import javax.inject.Named;
+import javax.enterprise.context.RequestScoped;
 import login.DAO.DAOLogin;
 import login.dominio.Login;
 import login.dominio.UsuarioSesion;
@@ -22,31 +18,21 @@ import login.dominio.UsuarioSesion;
  *
  * @author PJGT
  */
-@ManagedBean
-@SessionScoped
-public class MbLogin implements Serializable{
+@Named(value = "mbLoginScope")
+@RequestScoped
+public class MbLoginScope {
 
-    @ManagedProperty(value = "#{usuarioSesion}")
-    private UsuarioSesion usuarioSesion;
+    private UsuarioSesion usuarioSesion = new UsuarioSesion();
     private Login login = new Login();
-//    private boolean usuario = false;
+    private boolean usuario = false;
 
     /**
-     * Creates a new instance of MbLogin
+     * Creates a new instance of MbLoginScope
      */
-    public MbLogin() {
-//        usuario = validarUsuario();
+    public MbLoginScope() {
     }
 
-    public Login getLogin() {
-        return login;
-    }
-
-    public void setLogin(Login login) {
-        this.login = login;
-    }
-
-    public String accesoSistema() {
+     public String accesoSistema() {
         String url = "";
         boolean ok = validar();
         DAOLogin dao = new DAOLogin();
@@ -54,16 +40,16 @@ public class MbLogin implements Serializable{
 //            if (usuario == true) {
                 try {
                     Login log = dao.validarAcceso(login);
-//                    if (log.getPassword().equals("")) {
-//                        url = "login.xhtml";
-//                        Mensajes.Mensajes.MensajeAlertP("Acceso denegado");
-//                    } else {
+                    if (log.getPassword().equals("")) {
+                        url = "login.xhtml";
+                        Mensajes.Mensajes.MensajeAlertP("Acceso denegado");
+                    } else {
                         usuarioSesion.setPassword(log.getPassword());
                         url = "index.xhtml";
-//                    }
+                    }
                 } catch (SQLException ex) {
-//                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
-//                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
+                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
                 }
 //            } else {
 //                try {
@@ -77,8 +63,8 @@ public class MbLogin implements Serializable{
 //                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
 //                }
 //                url = "index.xhtml";
-//            }
-        }
+            }
+//        }
 
         return url;
     }
@@ -107,7 +93,9 @@ public class MbLogin implements Serializable{
 
         return ok;
     }
-
+    
+    
+    
     public UsuarioSesion getUsuarioSesion() {
         return usuarioSesion;
     }
@@ -116,11 +104,24 @@ public class MbLogin implements Serializable{
         this.usuarioSesion = usuarioSesion;
     }
 
-//    public boolean isUsuario() {
-//        return usuario;
-//    }
-//
-//    public void setUsuario(boolean usuario) {
-//        this.usuario = usuario;
-//    }
+    public Login getLogin() {
+        return login;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
+    }
+
+    public boolean isUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(boolean usuario) {
+        this.usuario = usuario;
+    }
+
+    
+    
+    
+    
 }

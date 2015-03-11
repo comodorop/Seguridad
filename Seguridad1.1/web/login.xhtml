@@ -6,6 +6,8 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>Facelet Title</title>
+        <script>
+        </script>
     </h:head>
     <h:body>
         <h:form>
@@ -21,11 +23,12 @@
                             ACCESO AL SISTEMA
                         </f:facet>
                         <h:outputLabel value="Contraseña:"/>
-                        <p:password id="psw" value="#{mbLogin.login.password}" />
+                        <p:password id="psw" value="#{mbLogin.login.password}" 
+                                    />
                         <p:commandButton  
                             value="Entrar" 
                             action="#{mbLogin.accesoSistema()}"
-                            
+                         
                             ajax="false"/> 
                     </h:panelGrid>
                 </div>

@@ -24,7 +24,7 @@ import login.dominio.UsuarioSesion;
  */
 @ManagedBean
 @SessionScoped
-public class MbLogin implements Serializable{
+public class MbLogin implements Serializable {
 
     @ManagedProperty(value = "#{usuarioSesion}")
     private UsuarioSesion usuarioSesion;
@@ -51,39 +51,23 @@ public class MbLogin implements Serializable{
         boolean ok = validar();
         DAOLogin dao = new DAOLogin();
         if (ok) {
-//            if (usuario == true) {
-                try {
-                    Login log = dao.validarAcceso(login);
-//                    if (log.getPassword().equals("")) {
-//                        url = "login.xhtml";
-//                        Mensajes.Mensajes.MensajeAlertP("Acceso denegado");
-//                    } else {
-                        usuarioSesion.setPassword(log.getPassword());
-                        url = "index.xhtml";
-//                    }
-                } catch (SQLException ex) {
-//                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
-//                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                Login log = dao.validarAcceso(login);
+                if (log.getPassword() != "") {
+                    usuarioSesion.setPassword(log.getPassword());
+                    HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                    httpSession.setAttribute("usuario", this.login.getUsuario());
+                    url = "index.xhtml";
                 }
-//            } else {
-//                try {
-//                    dao.guardarNuevoUsuario(login);
-//                    usuarioSesion.setPassword(login.getPassword());
-//                } catch (SQLException ex) {
-//                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
-//                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
-//                } catch (Exception ex) {
-//                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
-//                    Logger.getLogger(MbLogin.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                url = "index.xhtml";
-//            }
+                else{
+                    Mensajes.Mensajes.MensajeErrorP("Credencial no valida");
+                }
+            } catch (SQLException ex) {
+            }
         }
 
         return url;
     }
-
-   
 
     public boolean validar() {
         boolean ok = false;

@@ -7,8 +7,11 @@ package Seguridad;
 import Cedis.DAOCedis.DAOCedis;
 import Cedis.Dominio.Cedis;
 import Cedis.MbCedis;
+import MbAcceso.DAO.DAOAcceso;
+import MbAcceso.MbAcceso;
 import MbBaseDatos.MbBasesDatos;
 import MbTrreTable.MbArbol;
+import Modulos.DAO.DAOModulos;
 import Modulos.Dominio.Modulo;
 import Modulos.MbModulos;
 import Seguridad.DAO.DAOSeguridad;
@@ -70,26 +73,23 @@ public class MbSeguridad implements Serializable {
     private MbAccesos mbAccesos = new MbAccesos();
     @ManagedProperty(value = "#{mbCorreos}")
     private MbCorreos mbCorreos = new MbCorreos();
+    @ManagedProperty(value = "#{mbAcceso}")
+    private MbAcceso mbAcceso = new MbAcceso();
     private Correos correo = null;
 
     public MbSeguridad() {
-
         mbModulos.getModulo().setModulo("modulo");
         mbModulos.getModulo().setUrl("url");
-
-//        DAOCorreos dao = new DAOCorreos();
-//        try {
-//            
-//            
-//            boolean ok = dao.verificar();
-//            if (ok == false) {
-//                RequestContext context = RequestContext.getCurrentInstance();
-//                context.execute("PF('dlgCorreo').show();");
-//            }
-//        } catch (SQLException ex) {
-//            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
-//            Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        DAOAcceso dao = new DAOAcceso();
+        try {
+            boolean ok = dao.validarContraseña();
+            if (ok == true) {
+                RequestContext context = RequestContext.getCurrentInstance();
+                context.execute("PF('dlgPass').show();");
+            }
+        } catch (SQLException ex) {
+            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+        }
     }
 
     public void asignarPerfilUsuario() {
@@ -97,6 +97,10 @@ public class MbSeguridad implements Serializable {
         mbPerfiles.cargarAccesos();
         mbUsuarios.setLstCmbUsuarios(null);
     }
+    public void cambiarContraseña(){
+        
+    }
+    
 
     public void crearTreeTable() {
 
@@ -415,6 +419,14 @@ public class MbSeguridad implements Serializable {
 
     public void setCorreo(Correos correo) {
         this.correo = correo;
+    }
+
+    public MbAcceso getMbAcceso() {
+        return mbAcceso;
+    }
+
+    public void setMbAcceso(MbAcceso mbAcceso) {
+        this.mbAcceso = mbAcceso;
     }
 
 }

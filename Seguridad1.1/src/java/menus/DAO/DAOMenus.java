@@ -36,12 +36,16 @@ public class DAOMenus {
         String sql = "SELECT * FROM modulosMenus";
         Connection cn = ds.getConnection();
         Statement st = cn.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-        while (rs.next()) {
-            Menu menu = new Menu(rs.getInt("idMenu"), rs.getString("menu"));
-            menu.setIdMenu(rs.getInt("idMenu"));
-            menu.setMenu(rs.getString("menu"));
-            lstMenu.add(menu);
+        try {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Menu menu = new Menu(rs.getInt("idMenu"), rs.getString("menu"));
+                menu.setIdMenu(rs.getInt("idMenu"));
+                menu.setMenu(rs.getString("menu"));
+                lstMenu.add(menu);
+            }
+        } finally {
+            cn.close();
         }
         return lstMenu;
     }

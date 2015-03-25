@@ -6,9 +6,23 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title></title>
-        <script>
-            
-        </script>
+        <style>
+            .alert {
+                text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+                -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+            }
+            .alert-warning {
+                background-image: -webkit-linear-gradient(top, #f9d292 0%, #f9d292 100%);
+                background-image: linear-gradient(to bottom, #f9d292 0%, #f9d292 100%);
+                background-repeat: repeat-x;
+                border-color: #f9d292;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffcf8e3', endColorstr='#fff8efc0', GradientType=0);
+            }
+
+
+
+        </style>
     </h:head>
     <h:body>
         <h:form id="form2">
@@ -349,6 +363,7 @@
                         <p:commandButton icon="ui-icon-disk" 
                                          update="tableUsuarios msgUsuarios panelUsuarios" 
                                          actionListener="#{mbSeguridad.guardarUsuario()}" 
+                                         title="Guardar Usuario"
                                          />
                         <p:commandButton icon="ui-icon-cancel" 
                                          title="Actualizar Usuario"
@@ -499,7 +514,7 @@
                                     listener="#{mbSeguridad.mbBasesDatos.desmarcarDestino()}" 
                                     process="@this"
                                     update=":form:form2:tablaDestino :form:form2:btnIzquierda :form:form2:btnDerecha" />
-                            <p:column headerText="Empresas Disponibles">
+                            <p:column headerText="Bases de datos disponibles">
                                 #{tableBaseDatos.baseDatos}
                             </p:column>
                         </p:dataTable> 
@@ -586,16 +601,41 @@
                 </center>
             </p:dialog>
 
-
+            <p:dialog header="Cambio de Contraseña" 
+                      widgetVar="dlgPass"
+                      modal="true"
+                      closable="false"
+                      resizable="false">
+                <p:messages id="msgCambioContraseña" showDetail="true" autoUpdate="true" closable="true" />
+                <div class="alert alert-warning" style="padding: 10px">
+                    <label style="font: 12px sans-serif; color: white; border: 10px "> Se requiere cambiar la contraseña antes de continuar</label>
+                </div>
+                <br></br>
+                <h:panelGrid columns="2">
+                    <p:outputLabel style="color: black" value="Nueva contraseña"/>
+                    <p:password value="#{mbSeguridad.mbAcceso.acceso.pass1}"/>
+                    <p:outputLabel style="color: black" value="Repetir contraseña"/>
+                    <p:password value="#{mbSeguridad.mbAcceso.acceso.pass2}"/>
+                </h:panelGrid>
+                <center>
+                    <p:commandButton icon="ui-icon-person" 
+                                     title="Guardar cambio de contraseña"
+                                     actionListener="#{mbSeguridad.mbAcceso.actualizarContrasenias()}"
+                                     update="msgCambioContraseña"/>
+                    <p:commandButton icon="ui-icon-arrowreturnthick-1-w"
+                                     action="#{mbSeguridad.logout()}"
+                                     title="Salir"/>
+                </center>
+            </p:dialog>
 
 
         </h:form>
     </h:body>
 
     <script>
-                                                         function finalizar() {
-                                                             PF('dlgModulos').hide();
-                                                         }
+        function finalizar() {
+            PF('dlgModulos').hide();
+        }
     </script>
 
 

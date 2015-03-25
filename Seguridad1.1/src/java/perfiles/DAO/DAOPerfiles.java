@@ -38,12 +38,16 @@ public class DAOPerfiles {
         Connection cn = ds.getConnection();
         Statement st = cn.createStatement();
         String sql = "SELECT * FROM perfiles";
-        ResultSet rs = st.executeQuery(sql);
-        while (rs.next()) {
-            Perfiles perfil = new Perfiles();
-            perfil.setIdPerfil(rs.getInt("idPerfil"));
-            perfil.setPerfil(rs.getString("perfil"));
-            lstPerfiles.add(perfil);
+        try {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Perfiles perfil = new Perfiles();
+                perfil.setIdPerfil(rs.getInt("idPerfil"));
+                perfil.setPerfil(rs.getString("perfil"));
+                lstPerfiles.add(perfil);
+            }
+        } finally {
+            cn.close();
         }
         return lstPerfiles;
     }
@@ -53,10 +57,14 @@ public class DAOPerfiles {
         Connection cn = ds.getConnection();
         Statement st = cn.createStatement();
         String sql = "SELECT * FROM perfiles WHERE idPerfil = '" + idPerfil + "'";
-        ResultSet rs = st.executeQuery(sql);
-        while (rs.next()) {
-            p.setIdPerfil(rs.getInt("idPerfil"));
-            p.setPerfil(rs.getString("perfil"));
+        try {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                p.setIdPerfil(rs.getInt("idPerfil"));
+                p.setPerfil(rs.getString("perfil"));
+            }
+        } finally {
+            cn.close();
         }
         return p;
     }

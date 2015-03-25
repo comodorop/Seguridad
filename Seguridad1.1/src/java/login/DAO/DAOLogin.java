@@ -45,14 +45,18 @@ public class DAOLogin {
         Connection cn = ds.getConnection();
         String sql = "SELECT * FROM accesoAdministrativo WHERE password='" + pass + "'";
         Statement st = cn.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-        while (rs.next()) {
-            nombre = rs.getString("password");
-        }
-        if (nombre.equals("")) {
-            log.setPassword("");
-        } else {
-            log.setPassword(pass);
+        try {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                nombre = rs.getString("password");
+            }
+            if (nombre.equals("")) {
+                log.setPassword("");
+            } else {
+                log.setPassword(nombre);
+            }
+        } finally {
+            cn.close();
         }
         return log;
     }
@@ -63,14 +67,18 @@ public class DAOLogin {
         String nombre = "";
         String sql = "SELECT * FROM accesoAdministrativo";
         Statement st = cn.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-        while (rs.next()) {
-            nombre = rs.getString("password");
-        }
-        if (nombre.equals("")) {
-            ok = false;
-        } else {
-            ok = true;
+        try {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                nombre = rs.getString("password");
+            }
+            if (nombre.equals("")) {
+                ok = false;
+            } else {
+                ok = true;
+            }
+        } finally {
+            cn.close();
         }
         return ok;
     }
@@ -79,6 +87,10 @@ public class DAOLogin {
         Connection cn = ds.getConnection();
         Statement st = cn.createStatement();
         String sql = "INSERT INTO accesoAdministrativo (password) VALUES ('" + Utilerias.Utilerias.md5(login.getPassword()) + "')";
-        st.executeUpdate(sql);
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            cn.close();
+        }
     }
 }

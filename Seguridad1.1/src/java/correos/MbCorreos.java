@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -19,7 +20,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class MbCorreos implements Serializable{
+public class MbCorreos implements Serializable {
 
     private Correos correo = new Correos();
 
@@ -30,10 +31,10 @@ public class MbCorreos implements Serializable{
     }
 
     public void guardar() {
-       
+
         try {
             boolean ok = validar();
-            if (ok == true) { 
+            if (ok == true) {
                 DAOCorreos daoCorreo = new DAOCorreos();
                 daoCorreo.guardarCorreo(correo);
                 Mensajes.Mensajes.MensajeSuccesP("Guardados Satisfactoriamente");
@@ -58,6 +59,24 @@ public class MbCorreos implements Serializable{
             Mensajes.Mensajes.MensajeAlertP("Se requiere un protocolo");
         } else {
             ok = true;
+        }
+
+        return ok;
+    }
+
+    public boolean validarCorreo() {
+        boolean ok = false;
+        DAOCorreos dao = new DAOCorreos();
+        try {
+            ok = dao.validarCorreo();
+            if (ok == false) {
+                Mensajes.Mensajes.mensajeSuccesG("Se requiere una cuenta para de correo.");
+                RequestContext context = RequestContext.getCurrentInstance();
+                context.execute("PF('dlgCorreo').show();");
+            }
+        } catch (SQLException ex) {
+            Mensajes.Mensajes.mensajeErrorG(ex.getMessage());
+            Logger.getLogger(MbCorreos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return ok;

@@ -9,7 +9,7 @@
         <script>
         </script>
     </h:head>
-    <h:body>
+    <h:body style="background-image: url(resources/images/fondo.png); background-size: 100% ">
         <h:form>
             <center>
                 <div style="position: absolute;
@@ -17,20 +17,27 @@
                      top: 50%;
                      transform: translate(-50%, -50%);
                      -webkit-transform: translate(-50%, -50%);">
-                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <h:panelGrid columns="2">
-                        <f:facet name="header" >
-                            ACCESO AL SISTEMA
-                        </f:facet>
-                        <h:outputLabel value="Contraseña:"/>
-                        <p:password id="psw" value="#{mbLogin.login.password}" 
-                                    />
-                        <p:commandButton  
-                            value="Entrar" 
-                            action="#{mbLogin.accesoSistema()}"
-                         
-                            ajax="false"/> 
-                    </h:panelGrid>
+
+                        <p:messages id="messages" 
+                                    showDetail="true" 
+                                    autoUpdate="true" 
+                                    closable="true" />
+                        <h:panelGrid columns="2">
+                            <f:facet name="header" >
+                                ACCESO AL SISTEMA
+                            </f:facet>
+                            <h:outputLabel value="Contraseña:"/>
+                            <p:password id="psw" value="#{mbLogin.login.password}"/>
+
+                        </h:panelGrid>
+                        <br></br>
+                        <center>
+                            <p:commandButton  
+                                style="font-size: 13px"
+                                value="Entrar" 
+                                action="#{mbLogin.accesoSistema()}"
+                                ajax="false"/> 
+                        </center>
                 </div>
             </center>
         </h:form>

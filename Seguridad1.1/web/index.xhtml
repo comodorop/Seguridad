@@ -10,6 +10,19 @@
         <h:outputStylesheet library="css" name="main.css"/>
         <h:outputStylesheet library="css" name="estilos.css"/>
     </h:head>
+
+    <style>
+        .ui-widget-content {
+            border: 1px solid #dddddd;
+            background: #eeeeee url("/Seguridad1.1/faces/javax.faces.resource/images/ui-bg_highlight-soft_100_eeeeee_1x100.png?ln=primefaces-ui-lightness") 50% top repeat-x;
+            color: #333333;
+        }
+        .ui-layout{
+            background-color:  wheat
+        }
+
+    </style>
+
     <h:body>
         <h:form id="form">
             <p:growl id="growl" showDetail="true" sticky="true"  /> 
@@ -18,7 +31,9 @@
                               size="200" 
                               header="Left" 
                               closable="true" 
-                              collapsible="true">
+                              collapsible="true" styleClass="ui-top"
+                            
+                              >
                     <p:panelMenu style="width:200px">
                         <p:submenu label="Base de Datos">
                             <p:menuitem value="Base de datos" oncomplete="PF('dlgBaseDatos').show();"/>
@@ -28,7 +43,7 @@
                                         id="itemNvUsuario"
                                         icon="ui-icon-document"
                                         actionListener="#{mbSeguridad.mensajeAviso()}"
-                                        update=":form:form2:cmbCedis"
+                                        update=":form:form2:cmbCedis :form:growl"
                                         process="@this"
                                         />
                             <p:menuitem value="Asigancion de perfiles" 
@@ -55,6 +70,7 @@
                         <p:submenu label="Configuracion">
                             <p:menuitem value="Cuenta de Correo"
                                         icon="ui-icon-mail-closed"
+
                                         oncomplete="PF('dlgCorreo').show();"/>
                         </p:submenu>
                         <p:submenu  label="Salir">
@@ -119,9 +135,9 @@
 
 
 
-                                            function finalizarModulo() {
-                                                PF('dlgModulos').show();
-                                            }
+        function finalizarModulo() {
+            PF('dlgModulos').show();
+        }
     </script>
 </html>
 

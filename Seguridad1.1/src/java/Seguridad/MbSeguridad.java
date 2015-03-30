@@ -97,10 +97,10 @@ public class MbSeguridad implements Serializable {
         mbPerfiles.cargarAccesos();
         mbUsuarios.setLstCmbUsuarios(null);
     }
-    public void cambiarContraseña(){
-        
+
+    public void cambiarContraseña() {
+
     }
-    
 
     public void crearTreeTable() {
 
@@ -331,8 +331,11 @@ public class MbSeguridad implements Serializable {
             RequestContext.getCurrentInstance().showMessageInDialog(message);
         } else {
             mbCedis.cargarCedis(mbBasesDatos.getCmbBase().getJndi());
-            RequestContext context = RequestContext.getCurrentInstance();
-            context.execute("PF('dlgUsuario').show();");
+            boolean ok = mbCorreos.validarCorreo();
+            if (ok == true) {
+                RequestContext context = RequestContext.getCurrentInstance();
+                context.execute("PF('dlgUsuario').show();");
+            }
         }
     }
 

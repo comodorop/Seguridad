@@ -42,6 +42,8 @@ public class MbAcceso implements Serializable {
             } catch (SQLException ex) {
                 Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
                 Logger.getLogger(MbAcceso.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(MbAcceso.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

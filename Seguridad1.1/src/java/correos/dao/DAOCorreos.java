@@ -69,4 +69,16 @@ public class DAOCorreos {
         }
 
     }
+
+    public boolean validarCorreo() throws SQLException {
+        boolean ok = false;
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "SELECT * FROM correos";
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            ok = true;
+        }
+        return ok;
+    }
 }

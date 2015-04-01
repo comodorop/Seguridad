@@ -12,13 +12,22 @@
     </h:head>
 
     <style>
-        .ui-widget-content {
-            border: 1px solid #dddddd;
-            background: #eeeeee url("/Seguridad1.1/faces/javax.faces.resource/images/ui-bg_highlight-soft_100_eeeeee_1x100.png?ln=primefaces-ui-lightness") 50% top repeat-x;
-            color: #333333;
+        .myLayoutStyleClass .ui-layout-unit-header{
+            //background: yellow;
         }
-        .ui-layout{
-            background-color:  wheat
+
+       
+
+        .myLayoutStyleClass .ui-layout-unit-content{
+            /* background: #ffa84c; /* Old browsers */
+            // background: -moz-linear-gradient(top,  #ffa84c 0%, #ff7b0d 61%); /* FF3.6+ */
+            //background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffa84c), color-stop(61%,#ff7b0d)); /* Chrome,Safari4+ */
+            //background: -webkit-linear-gradient(top,  #ffa84c 0%,#ff7b0d 61%); /* Chrome10+,Safari5.1+ */
+            //background: -o-linear-gradient(top,  #ffa84c 0%,#ff7b0d 61%); /* Opera 11.10+ */
+            //background: -ms-linear-gradient(top,  #ffa84c 0%,#ff7b0d 61%); /* IE10+ */
+            //background: linear-gradient(to bottom,  #ffa84c 0%,#ff7b0d 61%); /* W3C */
+            //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffa84c', endColorstr='#ff7b0d',GradientType=0 ); /* IE6-9 */
+
         }
 
     </style>
@@ -31,8 +40,8 @@
                               size="200" 
                               header="Left" 
                               closable="true" 
-                              collapsible="true" styleClass="ui-top"
-                            
+                              collapsible="true" 
+                              styleClass="myLayoutStyleClass"
                               >
                     <p:panelMenu style="width:200px">
                         <p:submenu label="Base de Datos">
@@ -82,7 +91,7 @@
                         </p:submenu>
                     </p:panelMenu>
                 </p:layoutUnit>
-                <p:layoutUnit position="center">
+                <p:layoutUnit position="center" styleClass="myLayoutStyleClass">
                     <p:treeTable value="#{mbSeguridad.mbArbol.root1}"
                                  var="document"
                                  selectionMode="checkbox"
@@ -125,7 +134,8 @@
                                      actionListener="#{mbSeguridad.guardarAccionesModulos()}"
                                      process="@this treeT"
                                      update="growl"
-                                     title="Guardar Acciones"/>
+                                     title="Guardar Acciones"
+                                     styleClass="styleGreen"/>
                 </p:layoutUnit>
             </p:layout>
             <ui:include src="dialogs.xhtml"/>

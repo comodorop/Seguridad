@@ -144,6 +144,8 @@ public class MbSeguridad implements Serializable {
         mbPerfiles.guardarPerfil();
         mbArbol.setLstPerfiles(null);
         mbPerfiles.setPerfil(new Perfiles());
+        mbPerfiles.setLstPerfiles(null);
+//        mbSeguridad.mbPerfiles.lstPerfiles
     }
 
     public MbArbol getMbArbol() {
@@ -240,6 +242,8 @@ public class MbSeguridad implements Serializable {
                     limpiarCamposUsuarios();
                 } catch (SQLException ex) {
                     Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                    Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
                     Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

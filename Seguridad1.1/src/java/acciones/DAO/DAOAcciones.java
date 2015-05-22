@@ -54,6 +54,7 @@ public class DAOAcciones {
                 acciones.setIdAccion(rs.getInt("idAccion"));
                 acciones.setAccion(rs.getString("accion"));
                 acciones.setId(rs.getString("idBoton"));
+                acciones.setIdModulo(rs.getInt("idModulo"));
                 lstAcciones.add(acciones);
             }
         } finally {

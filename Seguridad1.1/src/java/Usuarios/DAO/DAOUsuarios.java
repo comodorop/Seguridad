@@ -32,12 +32,12 @@ public class DAOUsuarios {
         }
     }
 
-    public int guardarUsuario(Usuarios usuarios) throws SQLException {
+    public int guardarUsuario(Usuarios usuarios) throws SQLException, Exception {
         int id = 0;
         Connection cn = ds.getConnection();
         Statement st = cn.createStatement();
         ResultSet rs = null;
-        String sql = "INSERT INTO usuarios (usuario, login, password, email) VALUES ('" + usuarios.getUsuario() + "', '" + usuarios.getLogin() + "', '" + usuarios.getPass() + "', '" + usuarios.getEmail() + "')";
+        String sql = "INSERT INTO usuarios (usuario, login, password, email) VALUES ('" + usuarios.getUsuario() + "', '" + usuarios.getLogin() + "', '" + Utilerias.Utilerias.md5(usuarios.getPass()) + "', '" + usuarios.getEmail() + "')";
         String sqlIdentity = "SELECT @@IDENTITY as indentidad";
         try {
             st.executeUpdate(sql);

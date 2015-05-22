@@ -70,6 +70,7 @@
                                 <p:outputLabel value="Sub Menu:" style="color: black"/>
                                 <p:selectOneMenu style="width: 260px"
                                                  id="cmbSubMenu"
+                                                 filter="true"
                                                  value="#{mbSeguridad.mbMenus.mbSubMenu.cmbSubMenu}">
                                     <f:selectItems value="#{mbSeguridad.mbMenus.mbSubMenu.lstSubmenus}"/>
                                     <f:converter converterId="CSubModulo"/>
@@ -241,10 +242,14 @@
                       hideEffect="fold"
                       resizable="false"
                       modal="true">
-                <p:messages  id="msgPerfiles" showDetail="true" autoUpdate="true" closable="true" />
+                <p:messages  id="msgPerfiles" showDetail="true" 
+                             autoUpdate="true" closable="true" />
                 <h:panelGrid columns="2">
                     <p:outputLabel style="color: black" value="Perfiles :"/>
-                    <p:selectOneMenu value="#{mbSeguridad.mbPerfiles.cmbPerfil}" style="width: 300px">
+                    <p:selectOneMenu value="#{mbSeguridad.mbPerfiles.cmbPerfil}" 
+                                     style="width: 300px"
+                                     id="cmbAsignacionPerfilUsuario"
+                                     filter="true">
                         <f:selectItems value="#{mbSeguridad.mbPerfiles.lstPerfiles}"/>
                         <f:converter converterId="Cperfiles"/>
                         <p:ajax event="change" 
@@ -256,6 +261,7 @@
                     <p:selectOneMenu style="width: 300px" 
                                      value="#{mbSeguridad.mbUsuarios.cmbUsuario}"
                                      id="cmbUsuariosNoAsignados"
+                                     filter="true"
                                      disabled="#{mbSeguridad.mbPerfiles.mbAccesos.seleccion !=null}">
                         <f:converter converterId="Cusuarios"/>
                         <f:selectItems value="#{mbSeguridad.mbUsuarios.lstCmbUsuarios}"/>
@@ -335,6 +341,7 @@
                              id="panelUsuarios">
                     <p:outputLabel value="Cedis" style="color: black"/>
                     <p:selectOneMenu id="cmbCedis" 
+                                     filter="true"
                                      value="#{mbSeguridad.mbCedis.cmbCedis}"
                                      style="width: 325px">
                         <f:selectItems value="#{mbSeguridad.mbCedis.lstCedis}"/>
@@ -345,6 +352,7 @@
                     </p:selectOneMenu>
                     <p:outputLabel value="Zona" style="color: black"/>
                     <p:selectOneMenu id="cmbZonas"
+                                     filter="true"
                                      value="#{mbSeguridad.mbCedis.mbZonas.cmbZonas}"
                                      style="width: 325px">
                         <f:selectItems value="#{mbSeguridad.mbCedis.mbZonas.lstZonas}"/>
@@ -467,7 +475,8 @@
                                          :form:form2:btnActualizarP 
                                          :form:form2:tablaPerfiles 
                                          :form:form2:txtPerfil
-                                         :form:treeT:cmbPerfil"/>
+                                         :form:treeT:cmbPerfil
+                                         :form:form2:cmbAsignacionPerfilUsuario"/>
                     </f:facet>
                     <f:facet name="right">
                         <p:commandButton icon="ui-icon-pencil" 

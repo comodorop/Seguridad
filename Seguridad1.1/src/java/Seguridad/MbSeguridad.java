@@ -7,6 +7,8 @@ package Seguridad;
 import Cedis.DAOCedis.DAOCedis;
 import Cedis.Dominio.Cedis;
 import Cedis.MbCedis;
+import CorreosElectronicos.Correo;
+import CorreosElectronicos.DatosCorreo;
 import MbAcceso.DAO.DAOAcceso;
 import MbAcceso.MbAcceso;
 import MbBaseDatos.MbBasesDatos;
@@ -28,6 +30,7 @@ import correos.dao.DAOCorreos;
 import correos.dominio.Correos;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -36,6 +39,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import login.dominio.UsuarioSesion;
 import menus.MbMenus;
@@ -228,6 +232,50 @@ public class MbSeguridad implements Serializable {
                 try {
                     Utilerias utis = new Utilerias();
                     mbUsuarios.getUsuario().setPass(utis.generarPasswordAleatorio(mbUsuarios.getUsuario().getUsuario()));
+                    DatosCorreo datos = new DatosCorreo();
+                    datos.setAsunto("Acceso al sistema Web");
+                    datos.setCorreo(mbUsuarios.getUsuario().getEmail());
+                    datos.setDetalle("<html>\n"
+                            + "    <head>\n"
+                            + "        <title>TODO supply a title</title>\n"
+                            + "        <meta charset=\"UTF-8\">\n"
+                            + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                            + "    </head>\n"
+                            + "    <body>\n"
+                            + "        <div style=\"border-color: #e69104;\n"
+                            + "             border-width: 10px;\n"
+                            + "             border-style: solid; \n"
+                            + "             width: 600px; \n"
+                            + "             height: 250px;\n"
+                            + "             border-radius: 10px;\n"
+                            + "             background-color: #f1a931\">\n"
+                            + "            <center>\n"
+                            + "                <h1 style=\"color: white\">Bienvenido al Sistema </h1>\n"
+                            + "            </center>\n"
+                            + "            <br>\n"
+                            + "            <div>\n"
+                            + "                <strong>\n"
+                            + "                    <h1>\n"
+                            + "                        &nbsp;&nbsp;  <label style=\"float: left; color: white\">\n"
+                            + "                            Nombre: " + mbUsuarios.getUsuario().getUsuario() + " \n"
+                            + "                        </label><br>\n"
+                            + "                        &nbsp;&nbsp;  <label style=\"float: left; color: white\">\n"
+                            + "                            Usuario:  " + mbUsuarios.getUsuario().getLogin() + "   \n"
+                            + "                        </label><br>\n"
+                            + "                        &nbsp;&nbsp;  <label style=\"float: left; color: white\">\n"
+                            + "                            Password: " + mbUsuarios.getUsuario().getPass() + "\n"
+                            + "                        </label><br>\n"
+                            + "                    </h1>\n"
+                            + "                </strong>\n"
+                            + "            </div>\n"
+                            + "            <br>\n"
+                            + "            <br>\n"
+                            + "            <br>\n"
+                            + "\n"
+                            + "        </div>\n"
+                            + "    </body>\n"
+                            + "</html>\n");
+                    datos.setPara(mbUsuarios.getUsuario().getEmail());
                     DAOUsuarios dao = new DAOUsuarios();
                     DAOCedis daoCedis = new DAOCedis(mbBasesDatos.getCmbBase().getJndi());
                     if (mbUsuarios.getSelccionUsuairo() != null) {
@@ -235,8 +283,13 @@ public class MbSeguridad implements Serializable {
                         daoCedis.actualizarCedis(mbCedis.getCmbCedis().getIdCedis(), mbCedis.getMbZonas().getCmbZonas().getIdZona(), mbUsuarios.getUsuario().getIdUsuario());
                         Mensajes.Mensajes.MensajeSuccesP("Exito Usuario Modificado");
                     } else {
+                        DAOCorreos daoCorreos = new DAOCorreos();
+                        Correos c = daoCorreos.dameInformacionCorreo();
                         int id = dao.guardarUsuario(mbUsuarios.getUsuario());
                         daoCedis.guardarCedis(mbCedis.getCmbCedis().getIdCedis(), mbCedis.getMbZonas().getCmbZonas().getIdZona(), id);
+                        Correo.enviarCorreo(datos, c);
+//                        mbCedis.setLstCedis(new ArrayList<SelectItem>());
+                        mbCedis.getMbZonas().setLstZonas(new ArrayList<SelectItem>());
                         Mensajes.Mensajes.MensajeSuccesP("Nuevo usuario Registrado");
                     }
                     limpiarCamposUsuarios();
@@ -244,6 +297,7 @@ public class MbSeguridad implements Serializable {
                     Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
                     Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
+                    Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
                     Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

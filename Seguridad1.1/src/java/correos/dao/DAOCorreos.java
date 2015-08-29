@@ -81,4 +81,22 @@ public class DAOCorreos {
         }
         return ok;
     }
+
+    public Correos dameInformacionCorreo() throws SQLException {
+        Correos c = new Correos();
+        String sql = "SELECT * FROM correos";
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            c.setCorreo(rs.getString("correo"));
+            c.setPassword(rs.getString("password"));
+            c.setProtocolo(rs.getString("protocolo"));
+            c.setPuerto(rs.getInt("puerto"));
+            c.setServidor(rs.getString("servidor"));
+        }
+
+        return c;
+    }
+
 }

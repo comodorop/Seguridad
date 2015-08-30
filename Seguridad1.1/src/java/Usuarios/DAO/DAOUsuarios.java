@@ -118,7 +118,7 @@ public class DAOUsuarios {
         String sql = "SELECT * FROM usuarios WHERE idUsuario = '" + id + "'";
         try {
             rs = st.executeQuery(sql);
-            while (rs.next()){
+            while (rs.next()) {
                 usuarios.setIdUsuario(rs.getInt("idUsuario"));
                 usuarios.setUsuario(rs.getString("usuario"));
             }
@@ -128,5 +128,12 @@ public class DAOUsuarios {
             st.close();
         }
         return usuarios;
+    }
+
+    public void actualizarContraseña(Usuarios seleccion) throws SQLException, Exception {
+        Connection cn = ds.getConnection();
+        Statement st = cn.createStatement();
+        String sql = "UPDATE usuarios set password='" + Utilerias.Utilerias.md5(seleccion.getPass()) + "' WHERE idUsuario = '" + seleccion.getIdUsuario() + "'";
+        st.executeUpdate(sql);
     }
 }

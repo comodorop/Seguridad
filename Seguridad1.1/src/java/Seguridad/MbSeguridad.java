@@ -310,6 +310,68 @@ public class MbSeguridad implements Serializable {
         mbCedis.getMbZonas().getCmbZonas().setIdZona(0);
         mbUsuarios.setLstUsuarios(null);
         mbUsuarios.setSelccionUsuairo(null);
+        mbCedis.getMbZonas().setLstZonas(new ArrayList<SelectItem>());
+    }
+
+    public void enviarContraseña() {
+        DAOUsuarios dao = new DAOUsuarios();
+        mbUsuarios.getSelccionUsuairo();
+        DatosCorreo datos = new DatosCorreo();
+        datos.setAsunto("Acceso al sistema Web");
+        Utilerias utis = new Utilerias();
+        mbUsuarios.getSelccionUsuairo().setPass(utis.generarPasswordAleatorio(mbUsuarios.getSelccionUsuairo().getUsuario()));
+        datos.setCorreo(mbUsuarios.getSelccionUsuairo().getEmail());
+        datos.setDetalle("<html>\n"
+                + "    <head>\n"
+                + "        <title>TODO supply a title</title>\n"
+                + "        <meta charset=\"UTF-8\">\n"
+                + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                + "    </head>\n"
+                + "    <body>\n"
+                + "        <div style=\"border-color: #e69104;\n"
+                + "             border-width: 10px;\n"
+                + "             border-style: solid; \n"
+                + "             width: 600px; \n"
+                + "             height: 250px;\n"
+                + "             border-radius: 10px;\n"
+                + "             background-color: #f1a931\">\n"
+                + "            <center>\n"
+                + "                <h1 style=\"color: white\">Bienvenido al Sistema </h1>\n"
+                + "            </center>\n"
+                + "            <br>\n"
+                + "            <div>\n"
+                + "                <strong>\n"
+                + "                    <h1>\n"
+                + "                        &nbsp;&nbsp;  <label style=\"float: left; color: white\">\n"
+                + "                            Nombre: " + mbUsuarios.getSelccionUsuairo().getUsuario() + " \n"
+                + "                        </label><br>\n"
+                + "                        &nbsp;&nbsp;  <label style=\"float: left; color: white\">\n"
+                + "                            Usuario:  " + mbUsuarios.getSelccionUsuairo().getLogin() + "   \n"
+                + "                        </label><br>\n"
+                + "                        &nbsp;&nbsp;  <label style=\"float: left; color: white\">\n"
+                + "                            Password: " + mbUsuarios.getSelccionUsuairo().getPass() + "\n"
+                + "                        </label><br>\n"
+                + "                    </h1>\n"
+                + "                </strong>\n"
+                + "            </div>\n"
+                + "            <br>\n"
+                + "            <br>\n"
+                + "            <br>\n"
+                + "\n"
+                + "        </div>\n"
+                + "    </body>\n"
+                + "</html>\n");
+        datos.setPara(mbUsuarios.getUsuario().getEmail());
+        try {
+            dao.actualizarContraseña(mbUsuarios.getSelccionUsuairo());
+            DAOCorreos daoCorreos = new DAOCorreos();
+            Correos c = daoCorreos.dameInformacionCorreo();
+            Correo.enviarCorreo(datos, c);
+            Mensajes.Mensajes.MensajeSuccesP("Contraseña actualizada y enviada por correo");
+        } catch (Exception ex) {
+            Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+            Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void guardarAccion() {

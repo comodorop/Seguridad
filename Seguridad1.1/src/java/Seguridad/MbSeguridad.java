@@ -116,6 +116,12 @@ public class MbSeguridad implements Serializable {
         }
     }
 
+    
+    public void cargarAccesos(){
+        mbPerfiles.cargarAccesos(mbBasesDatos.getCmbBase().getIdBaseDatos());
+    }
+    
+    
     public void pasarInformacionMenu() {
         mbMenus.setMenu(mbMenus.getCmbMenu());
     }

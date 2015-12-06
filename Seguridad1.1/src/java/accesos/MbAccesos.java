@@ -47,6 +47,24 @@ public class MbAccesos implements Serializable {
             }
         }
     }
+    
+    
+     public void dameUsuarios(int idPerfil, int idBaseDatos){
+        if (lstAccesos == null) {
+            lstAccesos = new ArrayList<>();
+            DAOAccesos dao = new DAOAccesos();
+            try {
+                lstAccesos = dao.listaAccesos(idPerfil, idBaseDatos);
+            } catch (SQLException ex) {
+                Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
+                Logger.getLogger(MbAccesos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
+    
+    
 
     public void asignarUsuarioPerfil(int idUsuario, int idPerfil, int idBd) {
         try {

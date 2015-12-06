@@ -96,7 +96,7 @@
                                                      actionListener="#{mbSeguridad.guardar}"
                                                      process="@this"
                                                      immediate="true"
-                                                     update=":form:growl :form:form2:cmbModulos1"
+                                                     update=":form:growl :form:treeT :form:form2:cmbModulos1"
                                                      oncomplete="finalizar();"
                                                      onclick="PF('wiz').loadStep('tab0', false);"
                                                      title="Guardar accion"
@@ -253,7 +253,7 @@
                         <f:selectItems value="#{mbSeguridad.mbPerfiles.lstPerfiles}"/>
                         <f:converter converterId="Cperfiles"/>
                         <p:ajax event="change" 
-                                listener="#{mbSeguridad.mbPerfiles.cargarAccesos()}"
+                                listener="#{mbSeguridad.cargarAccesos()}"
                                 update="tableAcceso"
                                 process="@this"/>
                     </p:selectOneMenu>
@@ -378,7 +378,7 @@
                                          id="btnActualizarUsuario"
                                          actionListener="#{mbSeguridad.limpiarCamposUsuarios()}"
                                          disabled="#{mbSeguridad.mbUsuarios.selccionUsuairo==null}"
-                                         update="tableUsuarios panelUsuarios btnActualizarUsuario btnEliminarUsuario btnEnviarContraseña"/>
+                                         update="tableUsuarios panelUsuarios btnActualizarUsuario  btnEnviarContraseña"/>
                         
                         <p:commandButton icon="ui-icon-mail-open" 
                                          id="btnEnviarContraseña"
@@ -403,7 +403,7 @@
                              >
                     <p:ajax event="rowSelect" 
                             update=":form:form2:btnActualizarUsuario
-                            :form:form2:btnEliminarUsuario
+                            
                             :form:form2:panelUsuarios
                             :form:form2:msgUsuarios
                             :form:form2:btnEnviarContraseña"

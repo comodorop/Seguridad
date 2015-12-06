@@ -43,11 +43,17 @@ public class MbPerfiles implements Serializable {
         }
     }
 
+    public void cargarAccesos(int idBaseDatos) {
+        if (mbAccesos.getSeleccion() == null) {
+            mbAccesos.setLstAccesos(null);
+            mbAccesos.dameUsuarios(cmbPerfil.getIdPerfil(), idBaseDatos);
+        }
+    }
+
 //    public void limpiarPerfiles() {
 //        perfil = new Perfiles();
 //        seleccionPerfil = 
 //    }
-
     public ArrayList<SelectItem> getLstPerfiles() {
         if (lstPerfiles == null) {
             lstPerfiles = new ArrayList<>();

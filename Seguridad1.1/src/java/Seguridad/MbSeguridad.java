@@ -98,7 +98,8 @@ public class MbSeguridad implements Serializable {
 
     public void asignarPerfilUsuario() {
         mbAccesos.asignarUsuarioPerfil(mbUsuarios.getCmbUsuario().getIdUsuario(), mbPerfiles.getCmbPerfil().getIdPerfil(), mbBasesDatos.getCmbBase().getIdBaseDatos());
-        mbPerfiles.cargarAccesos();
+        mbPerfiles.cargarAccesos(mbBasesDatos.getCmbBase().getIdBaseDatos());
+//        mbPerfiles.cargarAccesos();
         mbUsuarios.setLstCmbUsuarios(null);
     }
 
@@ -116,12 +117,10 @@ public class MbSeguridad implements Serializable {
         }
     }
 
-    
-    public void cargarAccesos(){
+    public void cargarAccesos() {
         mbPerfiles.cargarAccesos(mbBasesDatos.getCmbBase().getIdBaseDatos());
     }
-    
-    
+
     public void pasarInformacionMenu() {
         mbMenus.setMenu(mbMenus.getCmbMenu());
     }
@@ -299,6 +298,7 @@ public class MbSeguridad implements Serializable {
                         Mensajes.Mensajes.MensajeSuccesP("Nuevo usuario Registrado");
                     }
                     limpiarCamposUsuarios();
+                   mbUsuarios.setLstCmbUsuarios(null);
                 } catch (SQLException ex) {
                     Mensajes.Mensajes.MensajeErrorP(ex.getMessage());
                     Logger.getLogger(MbSeguridad.class.getName()).log(Level.SEVERE, null, ex);

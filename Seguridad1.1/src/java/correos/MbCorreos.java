@@ -31,7 +31,6 @@ public class MbCorreos implements Serializable {
     }
 
     public void guardar() {
-
         try {
             boolean ok = validar();
             if (ok == true) {
@@ -81,6 +80,14 @@ public class MbCorreos implements Serializable {
 
         return ok;
     }
+    
+    
+    public void dameCorreoElectronico(){
+        
+    }
+    
+    
+    
 
     public Correos getCorreo() {
         return correo;

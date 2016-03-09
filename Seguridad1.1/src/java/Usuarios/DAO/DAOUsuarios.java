@@ -134,6 +134,10 @@ public class DAOUsuarios {
         Connection cn = ds.getConnection();
         Statement st = cn.createStatement();
         String sql = "UPDATE usuarios set password='" + Utilerias.Utilerias.md5(seleccion.getPass()) + "' WHERE idUsuario = '" + seleccion.getIdUsuario() + "'";
-        st.executeUpdate(sql);
+        try {
+            st.executeUpdate(sql);
+        } finally {
+            cn.close();
+        }
     }
 }
